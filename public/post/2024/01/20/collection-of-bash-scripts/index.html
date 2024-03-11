@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=443&amp;path=livereload" data-no-instant defer></script>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>collection of bash scripts | A minimal Hugo website</title>
+    <link rel="stylesheet" href="../../../../../css/style.css" />
+    <link rel="stylesheet" href="../../../../../css/fonts.css" />
+    
+  </head>
+
+  <body>
+    <nav>
+    <ul class="menu">
+      
+      <li><a href="../../../../../">Home</a></li>
+      
+      <li><a href="../../../../../post/">post</a></li>
+      
+      <li><a href="../../../../../about/">About</a></li>
+      
+      <li><a href="../../../../../categories/">Categories</a></li>
+      
+      <li><a href="../../../../../index.xml">Subscribe</a></li>
+      
+      <li><a href="../../../../../tags/">Tags</a></li>
+      
+    </ul>
+    <hr/>
+    </nav>
+
+<div class="article-meta">
+<h1><span class="title">collection of bash scripts</span></h1>
+
+<h2 class="date">2024/01/20</h2>
+</div>
+
+<main>
+<p>Just a collection of miscellaneous bash scripts</p>
+<h1 id="macs2-with-in-input-from-4-batches-of-bam-files-with-4-different-control-inputs">macs2 with in input from 4 batches of bam files with 4 different control inputs</h1>
+<pre><code class="language-bash">#!/bin/bash
+#SBATCH --job-name=MACS2-job
+#SBATCH -N 1
+#SBATCH --mem=12G
+#SBATCH --cpus-per-task=12
+#SBATCH -t 12:00:00
+#SBATCH --mail-user=antonio.ahn@petermac.org
+#SBATCH --mail-type=end
+#SBATCH --output=MACS-%j.out
+#SBATCH --error=MACS-%j.err
+
+# saved to macs2_withinput.sh /path/scripts
+
+# load MACS
+module load macs/2.2.7.1
+module load bedtools/2.27.1
+
+# path variable
+# move to folder with BAM files
+input_dir=&quot;/path/results/bam_files/final_bams/hg38&quot;
+output_files=&quot;/path/results/macs2/withinput/macs2_q0.05&quot;
+cd $input_dir
+
+# make directory of macs2
+mkdir -p $output_files
+
+
+# list the 5 batches and the 5 control IgG's
+# The printf statement will prepend the value with leading zeros so the width is 3, for example (&quot;4&quot; becomes &quot;004&quot;).
+batch_1=($(printf &quot;%03d-MCF7-*.bam &quot; {1..17}))
+batch_2=($(printf &quot;%03d-MCF7-*.bam &quot; {19..43}))
+batch_3=($(printf &quot;%03d-MCF7-*.bam &quot; {45..62}))
+batch_4=($(printf &quot;%03d-MCF7-*.bam &quot; {64..87}))
+# batch_5=($(printf &quot;%03d-MCF7-*.bam &quot; {89..105}))
+controls=(&quot;018-MCF7-Par-DMSO-R1-Rabbit-IgG-native_S9_hg38_noecoli_chrmrm_blrm_duprm_unmappedrm_multimaprm.bam&quot; &quot;044-MCF7-Par-DMSO-R1-Rabbit-IgG-native_S38_hg38_noecoli_chrmrm_blrm_duprm_unmappedrm_multimaprm.bam&quot; &quot;062-MCF7-Par-DMSO-R2-Rabbit-IgG-native_S58_hg38_noecoli_chrmrm_blrm_duprm_unmappedrm_multimaprm.bam&quot; &quot;063-MCF7-Par-DMSO-R1-Mouse-IgG2a-native_S59_hg38_noecoli_chrmrm_blrm_duprm_unmappedrm_multimaprm.bam&quot; &quot;088-MCF7-Par-DMSO-R1-Rabbit-IgG-mod-fix_S86_hg38_noecoli_chrmrm_blrm_duprm_unmappedrm_multimaprm.bam&quot;)
+
+
+for i in {1..4};
+do
+# Determine the current batch array
+current_batch=&quot;batch_$i[@]&quot;
+
+# Echo the batch number
+echo &quot;Processing Batch number $i&quot;
+
+# Loop through the current batch
+for file in &quot;${!current_batch}&quot;; do
+
+base=`basename ${file} _chrmrm_blrm_duprm_unmappedrm_multimaprm.bam`
+echo &quot;sample name is $base&quot;
+echo &quot;control name is ${controls[$((i-1))]}&quot;
+
+macs2 callpeak -t $file \
+-c ${controls[$((i-1))]} \
+-f BAMPE -g hs \
+-q 0.05 \
+-n $base \
+--outdir $output_files;
+
+done;
+done
+</code></pre>
+<h1 id="cat-pairs-of-bam-files">cat pairs of bam files</h1>
+<pre><code class="language-bash">filepairs=($(ls *R1*.fastq.gz) $(ls *R2*.fastq.gz))
+
+# this shows that the order is correct. tbh im not sure if i need to do the basenames here? 
+# also it doesnt matter if run1 shows first then run2 (or the other way round) as long as they are the correct pairs. THey will be cat'ed
+for (( idx=0 ; idx&lt;${#filepairs[@]} ; idx+=2));
+do
+replicate_1=${filepairs[idx]}
+replicate_2=${filepairs[idx+1]}
+
+base_1=`basename ${filepairs[idx]} _001_run1.fastq.gz`
+base_2=`basename ${filepairs[idx+1]} _001_run2.fastq.gz`
+
+outputname=$(echo $replicate_1 | sed -e 's/001_run1/001_cat/g' -e 's/001_run2/001_cat/g' )
+
+echo $replicate_1
+echo $replicate_2
+#echo $base_1
+#echo $base_2
+echo $outputname;
+
+done
+
+# now cat the files 
+for (( idx=0 ; idx&lt;${#filepairs[@]} ; idx+=2));
+do
+replicate_1=${filepairs[idx]}
+replicate_2=${filepairs[idx+1]};
+
+outputname=$(echo $replicate_1 | sed -e 's/001_run2/001_cat/g' -e 's/001_run1/001_cat/g' )
+
+cat $replicate_1 $replicate_2 &gt; ${outputname};
+
+done
+
+</code></pre>
+<h1 id="deep-tools-heatmap-color-up-and-dwon-separately">deep tools heatmap, color up and dwon separately</h1>
+<pre><code class="language-bash">
+#!/bin/bash
+#SBATCH --job-name=deeptools-job
+#SBATCH -N 1
+#SBATCH --partition=prod_med
+#SBATCH --mem=8G
+#SBATCH --cpus-per-task=15
+#SBATCH -t 10:00:00
+#SBATCH --mail-user=antonio.ahn@petermac.org
+#SBATCH --mail-type=end
+#SBATCH --output=DT_heatmap-%j.out
+#SBATCH --error=DT_heatmap-%j.err
+
+# script to make one compute matrix files for separate bigwig files (DMSO and LY treated in this case)
+# saved as heatmap.sh in /path/R_analysis/4.diffbind_overcome_resistance/1.overcome_resist_LYvsDMSO/2.annotations/deeptools_heatmap/scripts
+
+module load deeptools/3.5.0
+
+BW_dir=&quot;/path/results/bigwig&quot;
+BED_dir=&quot;/path/R_analysis/4.diffbind_overcome_resistance/1.overcome_resist_LYvsDMSO/2.annotations/data/bed&quot;
+output_dir=&quot;/path/R_analysis/4.diffbind_overcome_resistance/1.overcome_resist_LYvsDMSO/2.annotations/deeptools_heatmap/output&quot;
+
+mkdir -p $output_dir
+set -xe
+
+for i in up down;
+do
+
+if [[ $i == &quot;up&quot; ]]; then
+ color=Reds
+ echo $color
+else
+ color=Blues
+ echo $color
+fi
+
+computeMatrix reference-point --referencePoint center \
+-b 1000 -a 1000 \
+-R $BED_dir/ParLY_vs_ParDMSO_promoter_${i}.bed $BED_dir/ParLY_vs_ParDMSO_nonpromoter_${i}.bed \
+-S $BW_dir/Sample-1-DMSO-Rep-1_S10.bw \
+$BW_dir/Sample-9-Cryo-Par-DMSO-Rep-2_S14.bw \
+$BW_dir/Sample-2-Par-LY-Rep-1_S2.bw \
+$BW_dir/Sample-10-Par-LY-Rep-2_S10.bw \
+$BW_dir/Sample-5-LYR-DMSO-Rep-1_S5.bw \
+$BW_dir/Sample-13-Cryo-LYR-DMSO-Rep-2_S13.bw \
+$BW_dir/Sample-6-LYR-ARC-Rep-1_S12.bw \
+$BW_dir/Sample-14-LYR-ARC-Rep-2_S14.bw \
+$BW_dir/Sample-7-LYFR-DMSO-Rep-1_S7.bw \
+$BW_dir/Sample-15-Cryo-LYFR-DMSO-Rep-2_S15.bw \
+$BW_dir/Sample-8-LYFR-ARC-Rep-1-8-1_S13.bw \
+$BW_dir/Sample-16-LYFR-ARC-Rep-1-8-2_S16.bw \
+--skipZeros \
+--binSize 10 \
+--missingDataAsZero \
+--sortUsingSamples 3 \
+--sortRegions descend \
+-p 14 \
+-o $output_dir/PAR_LYvsDMSO_peaks_overcomeresist_${i}.gz
+
+plotHeatmap -m $output_dir/PAR_LYvsDMSO_peaks_overcomeresist_${i}.gz \
+-out $output_dir/PAR_LYvsDMSO_peaks_overcomeresist_${i}.png  \
+--colorMap $color \
+--dpi 300 \
+--sortUsingSamples 3 \
+--refPointLabel center \
+--samplesLabel PAR_DMSO_R1 PAR_DMSO_R2 PAR_LY_R1 PAR_LY_R2 \
+LYR_DMSO_R1 LYR_DMSO_R2 LYR_CDK2i_R1 LYR_CDK2i_R2 \
+LYFR_DMSO_R1 LYFR_DMSO_R2 LYFR_CDK2i_R1 LYFR_CDK2i_R2 \
+--yAxisLabel &quot;Accessibility&quot; \
+--regionsLabel promoter nonpromoter;
+
+done
+
+</code></pre>
+<pre><code class="language-bash"># different yMax depending on promoter or nonpromoter
+for i in ParLY_vs_ParDMSO_*.bed;
+do
+
+if echo $i | grep -q '_nonpromoter_'; then
+	number=60
+  echo $number
+else 
+  number=100
+  echo $number
+fi
+
+base=$(basename ${i} .bed | sed s/ParLY_vs_ParDMSO_//)
+
+computeMatrix reference-point --referencePoint center \
+-b 1000 -a 1000 \
+-R $BED_dir/${i} \
+-S $BW_dir/Sample-1-DMSO-Rep-1_S10.bw \
+$BW_dir/Sample-9-Cryo-Par-DMSO-Rep-2_S14.bw \
+$BW_dir/Sample-2-Par-LY-Rep-1_S2.bw \
+$BW_dir/Sample-10-Par-LY-Rep-2_S10.bw \
+--skipZeros \
+--binSize 10 \
+--missingDataAsZero \
+--sortUsingSamples 3 \
+--sortRegions descend \
+-p 14 \
+-o $output_dir/ParLY_vs_ParDMSO_${base}.gz
+
+plotProfile -m $output_dir/ParLY_vs_ParDMSO_${base}.gz \
+     -out $output_dir/ParLY_vs_ParDMSO_${base}.png \
+     --plotHeight=15 \
+     --plotWidth=15 \
+     --plotType=lines \
+     --perGroup \
+     --colors blue blue red red \
+     --yMax=$number \
+     --yMin=0 \
+     --samplesLabel PAR_DMSO_R1 PAR_DMSO_R2 PAR_LY_R1 PAR_LY_R2 \
+     --yAxisLabel &quot;Accessibility&quot; \
+     --plotTitle ${i}
+</code></pre>
+
+</main>
+
+  <footer>
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/katex/dist/katex.min.css">
+<script src="//cdn.jsdelivr.net/combine/npm/katex/dist/katex.min.js,npm/katex/dist/contrib/auto-render.min.js,npm/@xiee/utils/js/render-katex.js" defer></script>
+
+<script src="//cdn.jsdelivr.net/npm/@xiee/utils/js/center-img.min.js" defer></script>
+
+  
+  <hr/>
+  © <a href="https://yihui.org">Yihui Xie</a> 2017 &ndash; 2024 | <a href="https://github.com/yihui">Github</a> | <a href="https://twitter.com/xieyihui">Twitter</a>
+  
+  </footer>
+  </body>
+</html>
+

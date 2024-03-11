@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=443&amp;path=livereload" data-no-instant defer></script>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>bash one liner | A minimal Hugo website</title>
+    <link rel="stylesheet" href="../../../../../css/style.css" />
+    <link rel="stylesheet" href="../../../../../css/fonts.css" />
+    
+  </head>
+
+  <body>
+    <nav>
+    <ul class="menu">
+      
+      <li><a href="../../../../../">Home</a></li>
+      
+      <li><a href="../../../../../post/">post</a></li>
+      
+      <li><a href="../../../../../about/">About</a></li>
+      
+      <li><a href="../../../../../categories/">Categories</a></li>
+      
+      <li><a href="../../../../../index.xml">Subscribe</a></li>
+      
+      <li><a href="../../../../../tags/">Tags</a></li>
+      
+    </ul>
+    <hr/>
+    </nav>
+
+<div class="article-meta">
+<h1><span class="title">bash one liner</span></h1>
+
+<h2 class="date">2023/11/16</h2>
+</div>
+
+<main>
+<p>Just some bash notes which i find very useful but i keep forgetting.</p>
+<h1 id="find">Find</h1>
+<pre><code class="language-bash"># find and grep
+find . -name &quot;*.Rmd&quot; | xargs grep &quot;enricher&quot;
+
+# find and execute
+find . -name &quot;*rawcounts.csv&quot; -exec scp -r -i ~/.ssh/id_transfer {} transfer@pmcc-transfer-server.petermac.org.au:/data/transfer/antonio.ahn/raw_counts_csv \;
+
+# find multiple files in a directory
+find $bam_files_dir \( -name &quot;*MDA-MB-453*_unique_aln.bam&quot; -o -name &quot;*M453*_unique_aln.bam&quot; \)
+# then use that to merge 
+samtools merge m453_DMSO_7D_merged.bam $(find $bam_files_dir -name &quot;*MDA-MB-453*_unique_aln.bam&quot; | grep -E 'DMSO_7d|LY_7d|LYR1000')
+</code></pre>
+<h1 id="xarg">xarg</h1>
+<pre><code class="language-bash">
+xarg -I {} 
+
+</code></pre>
+<h1 id="matching-different-patterns-for-listing-files">matching different patterns for listing files</h1>
+<pre><code class="language-r"># This matches file names with either DMSO_7d.*bam or LY_7d.*bam$inside the name and both ends with .*bam or LY_7d.bam
+bamReads_1 &lt;- file.path(&quot;/researchers/antonio.ahn/1.BostonData_August2020/1.ATACseq/results_250820_set1&quot;, list.files(path = &quot;/researchers/antonio.ahn/1.BostonData_August2020/1.ATACseq/results_250820_set1&quot;, pattern = &quot;DMSO_7d.*bam$|LY_7d.*bam$&quot;))
+</code></pre>
+<pre><code class="language-bash"># But in bash you do this 
+ls *{DMSO_7d,LY_7d}*.bam
+
+# For gsub i also used s* (at https://stackoverflow.com/questions/17166618/regular-expression-containing-one-word-or-another)
+
+</code></pre>
+
+</main>
+
+  <footer>
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/katex/dist/katex.min.css">
+<script src="//cdn.jsdelivr.net/combine/npm/katex/dist/katex.min.js,npm/katex/dist/contrib/auto-render.min.js,npm/@xiee/utils/js/render-katex.js" defer></script>
+
+<script src="//cdn.jsdelivr.net/npm/@xiee/utils/js/center-img.min.js" defer></script>
+
+  
+  <hr/>
+  © <a href="https://yihui.org">Yihui Xie</a> 2017 &ndash; 2024 | <a href="https://github.com/yihui">Github</a> | <a href="https://twitter.com/xieyihui">Twitter</a>
+  
+  </footer>
+  </body>
+</html>
+

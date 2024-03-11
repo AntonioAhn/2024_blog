@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Home on A minimal Hugo website</title>
+    <link>//localhost:4321/</link>
+    <description>Recent content in Home on A minimal Hugo website</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Mon, 11 Mar 2024 00:00:00 +0000</lastBuildDate>
+    <atom:link href="//localhost:4321/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>test</title>
+      <link>//localhost:4321/post/2024/03/11/test/</link>
+      <pubDate>Mon, 11 Mar 2024 00:00:00 +0000</pubDate>
+      <guid>//localhost:4321/post/2024/03/11/test/</guid>
+      <description>this is a test</description>
+    </item>
+    <item>
+      <title>learning bash functions</title>
+      <link>//localhost:4321/post/2024/02/01/learning-bash-functions/</link>
+      <pubDate>Thu, 01 Feb 2024 00:00:00 +0000</pubDate>
+      <guid>//localhost:4321/post/2024/02/01/learning-bash-functions/</guid>
+      <description>Currently learning bash functions. First script using it.&#xA;#!/bin/bash #SBATCH --job-name=deeptools-job #SBATCH -N 1 #SBATCH --mem=8G #SBATCH --cpus-per-task=15 #SBATCH -t 10:00:00 #SBATCH --mail-user=antonio.ahn@petermac.org #SBATCH --mail-type=end #SBATCH --output=DT_heatmap-%j.out #SBATCH --error=DT_heatmap-%j.err # script to make one compute matrix files for separate bigwig files (DMSO and LY treated in this case) # saved as deeptools_heatmap.sh in /scripts module load deeptools/3.5.0 project_dir=&amp;quot;/researchers/antonio.ahn&amp;quot; BW_dir=&amp;quot;${project_dir}/results/bigwig/BPM&amp;quot; BED_dir=&amp;quot;${project_dir}/R_analysis/2.peak_exploratory/data/bed&amp;quot; output_dir=&amp;quot;${project_dir}/R_analysis/2.peak_exploratory/deeptools_heatmap/output&amp;quot; set -xe # Function to process bigwig files function process_files() { local file_array=(&amp;quot;${!</description>
+    </item>
+    <item>
+      <title>collection of bash scripts</title>
+      <link>//localhost:4321/post/2024/01/20/collection-of-bash-scripts/</link>
+      <pubDate>Sat, 20 Jan 2024 00:00:00 +0000</pubDate>
+      <guid>//localhost:4321/post/2024/01/20/collection-of-bash-scripts/</guid>
+      <description>Just a collection of miscellaneous bash scripts&#xA;macs2 with in input from 4 batches of bam files with 4 different control inputs #!/bin/bash #SBATCH --job-name=MACS2-job #SBATCH -N 1 #SBATCH --mem=12G #SBATCH --cpus-per-task=12 #SBATCH -t 12:00:00 #SBATCH --mail-user=antonio.ahn@petermac.org #SBATCH --mail-type=end #SBATCH --output=MACS-%j.out #SBATCH --error=MACS-%j.err # saved to macs2_withinput.sh /path/scripts # load MACS module load macs/2.2.7.1 module load bedtools/2.27.1 # path variable # move to folder with BAM files input_dir=&amp;quot;/path/results/bam_files/final_bams/hg38&amp;quot; output_files=&amp;quot;/path/results/macs2/withinput/macs2_q0.05&amp;quot; cd $input_dir # make directory of macs2 mkdir -p $output_files # list the 5 batches and the 5 control IgG&#39;s # The printf statement will prepend the value with leading zeros so the width is 3, for example (&amp;quot;4&amp;quot; becomes &amp;quot;004&amp;quot;).</description>
+    </item>
+    <item>
+      <title>bash scripts for Lexogen QuantSeq 3prime UTR mRNA-Seq</title>
+      <link>//localhost:4321/post/2024/01/12/bash-scripts-for-lexogen-quantseq-3prime-utr-mrna-seq/</link>
+      <pubDate>Fri, 12 Jan 2024 00:00:00 +0000</pubDate>
+      <guid>//localhost:4321/post/2024/01/12/bash-scripts-for-lexogen-quantseq-3prime-utr-mrna-seq/</guid>
+      <description>Current bash scripts for running QuantSeq 3&amp;rsquo;UTR RNAseq (Lexogen) Strand specific single-end Set up the files cd ${working_dir} mkdir -p R_analysis raw_data results scripts trim_data workflow cd R_analysis mkdir -p main_analysis data FASTQC #!/bin/bash #SBATCH --job-name=FASTQC-job #SBATCH -N 1 #SBATCH --mem=3G #SBATCH --cpus-per-task=10 #SBATCH -t 5:00:00 #SBATCH --mail-user=antonio.ahn@petermac.org #SBATCH --mail-type=end #SBATCH --output=FASTQC_raw-%j.out #SBATCH --error=FASTQC_raw-%j.err # saved to fastqc.sh at ${working_dir}/scripts module load fastqc/0.11.5 module load multiqc/1.8 set -xe # make a variable for the path where data is raw_data_dir=/pipeline/Archives/NextSeq/231130_VH01624_45_AACF3KNHV/ProjectFolders/Project_Christabella-Mahendra fastqc_out_dir=&amp;quot;${working_dir}/raw_data&amp;quot; cd $raw_data_dir # make a variable for the path where output will be stored mkdir -p $fastqc_out_dir/fastqc_out # Run fastqc for i in *R1_001.</description>
+    </item>
+    <item>
+      <title>Gene ID Conversion</title>
+      <link>//localhost:4321/post/2024/01/07/gene-id-conversion/</link>
+      <pubDate>Sun, 07 Jan 2024 00:00:00 +0000</pubDate>
+      <guid>//localhost:4321/post/2024/01/07/gene-id-conversion/</guid>
+      <description>Various ways to convert ENTREZ ID to gene symbols and vice versa&#xA;library(tidyverse) library(DOSE) load dataset # load a list of ENTREZ ID&#39;s data(geneList) geneList %&amp;gt;% head ## 4312 8318 10874 55143 55388 991 ## 4.572613 4.514594 4.418218 4.144075 3.876258 3.677857 length(names(geneList)) ## [1] 12495 biomart library(biomaRt) biomaRt::listEnsemblArchives() ## name date url version ## 1 Ensembl GRCh37 Feb 2014 https://grch37.ensembl.org GRCh37 ## 2 Ensembl 110 Jul 2023 https://jul2023.archive.ensembl.org 110 ## 3 Ensembl 109 Feb 2023 https://feb2023.</description>
+    </item>
+    <item>
+      <title>dotplot from multiple hyperogeometric tests</title>
+      <link>//localhost:4321/post/2023/11/22/dotplot-from-multiple-hyperogeometric-tests/</link>
+      <pubDate>Wed, 22 Nov 2023 00:00:00 +0000</pubDate>
+      <guid>//localhost:4321/post/2023/11/22/dotplot-from-multiple-hyperogeometric-tests/</guid>
+      <description>library(DOSE) library(tidyverse) library(org.Hs.eg.db) library(clusterProfiler) library(DT) data(geneList) geneList %&amp;gt;% head ## 4312 8318 10874 55143 55388 991 ## 4.572613 4.514594 4.418218 4.144075 3.876258 3.677857 geneList %&amp;gt;% tail ## 10551 10974 79838 79901 57758 4969 ## -3.330760 -3.416798 -3.457221 -3.603467 -3.945467 -4.302655 # change ENTREZID to gene symbols names(geneList) &amp;lt;- mapIds(org.Hs.eg.db, keys=names(geneList), keytype=&amp;quot;ENTREZID&amp;quot;, columns=&amp;quot;SYMBOL&amp;quot;,column=&amp;quot;SYMBOL&amp;quot;) ## &#39;select()&#39; returned 1:1 mapping between keys and columns genes_list &amp;lt;- list() genes_list[[1]] &amp;lt;- names(geneList)[geneList &amp;gt; 2] genes_list[[2]] &amp;lt;- names(geneList)[geneList &amp;lt; -2] names(genes_list) &amp;lt;- paste(&amp;quot;comparison&amp;quot;, 1:length(genes_list), sep = &amp;quot;_&amp;quot;) genes_list %&amp;gt;% lapply(head) ## $comparison_1 ## [1] &amp;quot;MMP1&amp;quot; &amp;quot;CDC45&amp;quot; &amp;quot;NMU&amp;quot; &amp;quot;CDCA8&amp;quot; &amp;quot;MCM10&amp;quot; &amp;quot;CDC20&amp;quot; ## ## $comparison_2 ## [1] NA &amp;quot;COL16A1&amp;quot; &amp;quot;CACNA1D&amp;quot; &amp;quot;MAOB&amp;quot; &amp;quot;ADIPOQ&amp;quot; &amp;quot;VSTM4&amp;quot; genes_list %&amp;gt;% lapply(length) ## $comparison_1 ## [1] 110 ## ## $comparison_2 ## [1] 97 hypergeo_output &amp;lt;- genes_list %&amp;gt;% lapply(function(x){ x %&amp;gt;% enricher(TERM2GENE = MSigDB.</description>
+    </item>
+    <item>
+      <title>R one liner</title>
+      <link>//localhost:4321/post/2023/11/22/r-one-liner/</link>
+      <pubDate>Wed, 22 Nov 2023 00:00:00 +0000</pubDate>
+      <guid>//localhost:4321/post/2023/11/22/r-one-liner/</guid>
+      <description>rename all column names with an suffix H3K27acCounts_RBpeaks %&amp;gt;% mcols %&amp;gt;% as_tibble %&amp;gt;% dplyr::select(Conc:FDR,ID) %&amp;gt;% rename_with(.cols = everything(), function(x){paste0(x, &amp;quot;_H3K27ac&amp;quot;)}) </description>
+    </item>
+    <item>
+      <title>bash one liner</title>
+      <link>//localhost:4321/post/2023/11/16/bash-one-liner/</link>
+      <pubDate>Thu, 16 Nov 2023 00:00:00 +0000</pubDate>
+      <guid>//localhost:4321/post/2023/11/16/bash-one-liner/</guid>
+      <description>Just some bash notes which i find very useful but i keep forgetting.&#xA;Find # find and grep find . -name &amp;quot;*.Rmd&amp;quot; | xargs grep &amp;quot;enricher&amp;quot; # find and execute find . -name &amp;quot;*rawcounts.csv&amp;quot; -exec scp -r -i ~/.ssh/id_transfer {} transfer@pmcc-transfer-server.petermac.org.au:/data/transfer/antonio.ahn/raw_counts_csv \; # find multiple files in a directory find $bam_files_dir \( -name &amp;quot;*MDA-MB-453*_unique_aln.bam&amp;quot; -o -name &amp;quot;*M453*_unique_aln.bam&amp;quot; \) # then use that to merge samtools merge m453_DMSO_7D_merged.bam $(find $bam_files_dir -name &amp;quot;*MDA-MB-453*_unique_aln.</description>
+    </item>
+    <item>
+      <title>heat maps</title>
+      <link>//localhost:4321/post/2023/10/18/heat-maps/</link>
+      <pubDate>Wed, 18 Oct 2023 00:00:00 +0000</pubDate>
+      <guid>//localhost:4321/post/2023/10/18/heat-maps/</guid>
+      <description>library(ComplexHeatmap) library(tidyverse) library(pheatmap) library(circlize) ComplexHeatmap generate matrix (from https://jokergoo.github.io/ComplexHeatmap-reference/book/a-single-heatmap.html)&#xA;set.seed(123) nr1 &amp;lt;- 4 nr2 &amp;lt;- 8 nr3 &amp;lt;- 6 nr &amp;lt;- nr1 + nr2 + nr3 nc1 &amp;lt;- 6 nc2 &amp;lt;- 8 nc3 &amp;lt;- 10 nc &amp;lt;- nc1 + nc2 + nc3 mat &amp;lt;- cbind( rbind( matrix(rnorm(nr1 * nc1, mean = 1, sd = 0.5), nr = nr1), matrix(rnorm(nr2 * nc1, mean = 0, sd = 0.5), nr = nr2), matrix(rnorm(nr3 * nc1, mean = 0, sd = 0.</description>
+    </item>
+    <item>
+      <title>Uncompressing files</title>
+      <link>//localhost:4321/post/2023/10/16/uncompressing-files/</link>
+      <pubDate>Mon, 16 Oct 2023 00:00:00 +0000</pubDate>
+      <guid>//localhost:4321/post/2023/10/16/uncompressing-files/</guid>
+      <description>I always forget which codes to use to uncompress different compressed file types.&#xA;This post was really helpful.&#xA;file file.zip # file.zip: Zip archive data, at least v1.0 to extract # solution: use unzip. file file.rar # file.rar: RAR archive data, v1d, os: Win32 # solution: use unrar. file file.7z # file.7z: 7-zip archive data, version 0.3 # solution: use 7z. file file.tgz # file.tgz: gzip compressed data, from Unix, last modified: Sun Oct 13 01:14:43 2013 # solution: use tar zxvf.</description>
+    </item>
+    <item>
+      <title>venn_diagram</title>
+      <link>//localhost:4321/post/2023/10/14/venn_diagram/</link>
+      <pubDate>Sat, 14 Oct 2023 00:00:00 +0000</pubDate>
+      <guid>//localhost:4321/post/2023/10/14/venn_diagram/</guid>
+      <description>load library library(rtracklayer) library(tidyverse) library(ChIPpeakAnno) library(ggsci) load peak files From &amp;ldquo;The ChIPpeakAnno user’s guide&amp;rdquo;&#xA;bed &amp;lt;- system.file(&amp;quot;extdata&amp;quot;, &amp;quot;MACS_output.bed&amp;quot;, package=&amp;quot;ChIPpeakAnno&amp;quot;) gr1 &amp;lt;- toGRanges(bed, format=&amp;quot;BED&amp;quot;, header=FALSE) gff &amp;lt;- system.file(&amp;quot;extdata&amp;quot;, &amp;quot;GFF_peaks.gff&amp;quot;, package=&amp;quot;ChIPpeakAnno&amp;quot;) gr2 &amp;lt;- toGRanges(gff, format=&amp;quot;GFF&amp;quot;, header=FALSE, skip=3) ## If you are importing files downloaded from ensembl, ## it will be better to import the files into a TxDb object, ## and then convert to GRanges by toGRanges. Here is the sample code: ## library(GenomicFeatures) ## txdb &amp;lt;- makeTxDbFromGFF(&#39;/home/aahn/.</description>
+    </item>
+    <item>
+      <title>Hello R Markdown</title>
+      <link>//localhost:4321/post/2020/12/01/hello-r-markdown/</link>
+      <pubDate>Tue, 01 Dec 2020 21:13:14 -0500</pubDate>
+      <guid>//localhost:4321/post/2020/12/01/hello-r-markdown/</guid>
+      <description>R Markdown This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see http://rmarkdown.rstudio.com.&#xA;You can embed an R code chunk like this:&#xA;summary(cars) ## speed dist ## Min. : 4.0 Min. : 2.00 ## 1st Qu.:12.0 1st Qu.: 26.00 ## Median :15.0 Median : 36.00 ## Mean :15.4 Mean : 42.98 ## 3rd Qu.</description>
+    </item>
+    <item>
+      <title>Another Note on A blogdown Tutorial</title>
+      <link>//localhost:4321/note/2017/06/14/another-note/</link>
+      <pubDate>Wed, 14 Jun 2017 00:00:00 +0000</pubDate>
+      <guid>//localhost:4321/note/2017/06/14/another-note/</guid>
+      <description>I just discovered an awesome tutorial on blogdown written by Alison. I have to admit this is the best blogdown tutorial I have seen so far.</description>
+    </item>
+    <item>
+      <title>A Quick Note on Two Beautiful Websites</title>
+      <link>//localhost:4321/note/2017/06/13/a-quick-note/</link>
+      <pubDate>Tue, 13 Jun 2017 00:00:00 +0000</pubDate>
+      <guid>//localhost:4321/note/2017/06/13/a-quick-note/</guid>
+      <description>To me, the two most impressive websites based on blogdown are:&#xA;Rob J Hyndman&amp;rsquo;s personal website. Live Free or Dichotomize by Lucy and Nick et al. I&amp;rsquo;m sure there will be more.</description>
+    </item>
+    <item>
+      <title>A Plain Markdown Post</title>
+      <link>//localhost:4321/post/2016/02/14/a-plain-markdown-post/</link>
+      <pubDate>Sun, 14 Feb 2016 00:00:00 +0000</pubDate>
+      <guid>//localhost:4321/post/2016/02/14/a-plain-markdown-post/</guid>
+      <description>This sample post is mainly for blogdown users. If you do not use blogdown, you can skip the first section.&#xA;1. Markdown or R Markdown This is a post written in plain Markdown (*.md) instead of R Markdown (*.Rmd). The major differences are:&#xA;You cannot run any R code in a plain Markdown document, whereas in an R Markdown document, you can embed R code chunks (```{r}); A plain Markdown post is rendered through Goldmark by default, and an R Markdown document is compiled by rmarkdown and Pandoc.</description>
+    </item>
+    <item>
+      <title>Lorem Ipsum</title>
+      <link>//localhost:4321/post/2015/07/23/lorem-ipsum/</link>
+      <pubDate>Thu, 23 Jul 2015 00:00:00 +0000</pubDate>
+      <guid>//localhost:4321/post/2015/07/23/lorem-ipsum/</guid>
+      <description>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.&#xA;Quisque mattis volutpat lorem vitae feugiat.</description>
+    </item>
+    <item>
+      <title>test</title>
+      <link>//localhost:4321/post/2015/07/23/test/</link>
+      <pubDate>Thu, 23 Jul 2015 00:00:00 +0000</pubDate>
+      <guid>//localhost:4321/post/2015/07/23/test/</guid>
+      <description>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</description>
+    </item>
+    <item>
+      <title>About Hugo XMin</title>
+      <link>//localhost:4321/about/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>//localhost:4321/about/</guid>
+      <description>XMin is the first Hugo theme I have designed. The original reason that I wrote it was I needed a minimal example of Hugo themes when I was writing the blogdown book. Basically I wanted a simple theme that supports a navigation menu, a home page, other single pages, lists of pages, blog posts, categories, tags, and RSS. That is all. Nothing fancy. In terms of CSS and JavaScript, I really want to keep them minimal.</description>
+    </item>
+  </channel>
+</rss>

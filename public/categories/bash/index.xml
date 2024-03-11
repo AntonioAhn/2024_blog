@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Bash on Antonio Ahn&#39;s website</title>
+    <link>//localhost:4321/categories/bash/</link>
+    <description>Recent content in Bash on Antonio Ahn&#39;s website</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Thu, 01 Feb 2024 00:00:00 +0000</lastBuildDate>
+    <atom:link href="//localhost:4321/categories/bash/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>learning bash functions</title>
+      <link>//localhost:4321/posts/2024-02-01-learning-bash-functions/</link>
+      <pubDate>Thu, 01 Feb 2024 00:00:00 +0000</pubDate>
+      <guid>//localhost:4321/posts/2024-02-01-learning-bash-functions/</guid>
+      <description>Currently learning bash functions. First script using it.&#xA;#!/bin/bash #SBATCH --job-name=deeptools-job #SBATCH -N 1 #SBATCH --mem=8G #SBATCH --cpus-per-task=15 #SBATCH -t 10:00:00 #SBATCH --mail-user=antonio.ahn@petermac.org #SBATCH --mail-type=end #SBATCH --output=DT_heatmap-%j.out #SBATCH --error=DT_heatmap-%j.err # script to make one compute matrix files for separate bigwig files (DMSO and LY treated in this case) # saved as deeptools_heatmap.sh in /scripts module load deeptools/3.5.0 project_dir=&amp;quot;/researchers/antonio.ahn&amp;quot; BW_dir=&amp;quot;${project_dir}/results/bigwig/BPM&amp;quot; BED_dir=&amp;quot;${project_dir}/R_analysis/2.peak_exploratory/data/bed&amp;quot; output_dir=&amp;quot;${project_dir}/R_analysis/2.peak_exploratory/deeptools_heatmap/output&amp;quot; set -xe # Function to process bigwig files function process_files() { local file_array=(&amp;quot;${!</description>
+    </item>
+    <item>
+      <title>collection of bash scripts</title>
+      <link>//localhost:4321/posts/2024-01-20-collection-of-bash-scripts/</link>
+      <pubDate>Sat, 20 Jan 2024 00:00:00 +0000</pubDate>
+      <guid>//localhost:4321/posts/2024-01-20-collection-of-bash-scripts/</guid>
+      <description>Just a collection of miscellaneous bash scripts&#xA;macs2 with in input from 4 batches of bam files with 4 different control inputs #!/bin/bash #SBATCH --job-name=MACS2-job #SBATCH -N 1 #SBATCH --mem=12G #SBATCH --cpus-per-task=12 #SBATCH -t 12:00:00 #SBATCH --mail-user=antonio.ahn@petermac.org #SBATCH --mail-type=end #SBATCH --output=MACS-%j.out #SBATCH --error=MACS-%j.err # saved to macs2_withinput.sh /path/scripts # load MACS module load macs/2.2.7.1 module load bedtools/2.27.1 # path variable # move to folder with BAM files input_dir=&amp;quot;/path/results/bam_files/final_bams/hg38&amp;quot; output_files=&amp;quot;/path/results/macs2/withinput/macs2_q0.05&amp;quot; cd $input_dir # make directory of macs2 mkdir -p $output_files # list the 5 batches and the 5 control IgG&#39;s # The printf statement will prepend the value with leading zeros so the width is 3, for example (&amp;quot;4&amp;quot; becomes &amp;quot;004&amp;quot;).</description>
+    </item>
+    <item>
+      <title>bash scripts for Lexogen QuantSeq 3prime UTR mRNA-Seq</title>
+      <link>//localhost:4321/posts/2024-01-12-bashscripts-lexogen-quantseq-3prime-utr-mrna-seq/</link>
+      <pubDate>Fri, 12 Jan 2024 00:00:00 +0000</pubDate>
+      <guid>//localhost:4321/posts/2024-01-12-bashscripts-lexogen-quantseq-3prime-utr-mrna-seq/</guid>
+      <description>Current bash scripts for running QuantSeq 3&amp;rsquo;UTR RNAseq (Lexogen) Strand specific single-end Set up the files cd ${working_dir} mkdir -p R_analysis raw_data results scripts trim_data workflow cd R_analysis mkdir -p main_analysis data FASTQC #!/bin/bash #SBATCH --job-name=FASTQC-job #SBATCH -N 1 #SBATCH --mem=3G #SBATCH --cpus-per-task=10 #SBATCH -t 5:00:00 #SBATCH --mail-user=antonio.ahn@petermac.org #SBATCH --mail-type=end #SBATCH --output=FASTQC_raw-%j.out #SBATCH --error=FASTQC_raw-%j.err # saved to fastqc.sh at ${working_dir}/scripts module load fastqc/0.11.5 module load multiqc/1.8 set -xe # make a variable for the path where data is raw_data_dir=/pipeline/Archives/NextSeq/231130_VH01624_45_AACF3KNHV/ProjectFolders/Project_Christabella-Mahendra fastqc_out_dir=&amp;quot;${working_dir}/raw_data&amp;quot; cd $raw_data_dir # make a variable for the path where output will be stored mkdir -p $fastqc_out_dir/fastqc_out # Run fastqc for i in *R1_001.</description>
+    </item>
+    <item>
+      <title>bash one liner</title>
+      <link>//localhost:4321/posts/2023-10-16-bash-one-liner/</link>
+      <pubDate>Thu, 16 Nov 2023 00:00:00 +0000</pubDate>
+      <guid>//localhost:4321/posts/2023-10-16-bash-one-liner/</guid>
+      <description>Just some bash notes which i find very useful but i keep forgetting.&#xA;Find # find and grep find . -name &amp;quot;*.Rmd&amp;quot; | xargs grep &amp;quot;enricher&amp;quot; # find and execute find . -name &amp;quot;*rawcounts.csv&amp;quot; -exec scp -r -i ~/.ssh/id_transfer {} transfer@pmcc-transfer-server.petermac.org.au:/data/transfer/antonio.ahn/raw_counts_csv \; # find multiple files in a directory find $bam_files_dir \( -name &amp;quot;*MDA-MB-453*_unique_aln.bam&amp;quot; -o -name &amp;quot;*M453*_unique_aln.bam&amp;quot; \) # then use that to merge samtools merge m453_DMSO_7D_merged.bam $(find $bam_files_dir -name &amp;quot;*MDA-MB-453*_unique_aln.</description>
+    </item>
+    <item>
+      <title>Uncompressing files</title>
+      <link>//localhost:4321/posts/2023-10-16-uncompressing-files/</link>
+      <pubDate>Mon, 16 Oct 2023 00:00:00 +0000</pubDate>
+      <guid>//localhost:4321/posts/2023-10-16-uncompressing-files/</guid>
+      <description>I always forget which codes to use to uncompress different compressed file types.&#xA;This post was really helpful.&#xA;file file.zip # file.zip: Zip archive data, at least v1.0 to extract # solution: use unzip. file file.rar # file.rar: RAR archive data, v1d, os: Win32 # solution: use unrar. file file.7z # file.7z: 7-zip archive data, version 0.3 # solution: use 7z. file file.tgz # file.tgz: gzip compressed data, from Unix, last modified: Sun Oct 13 01:14:43 2013 # solution: use tar zxvf.</description>
+    </item>
+  </channel>
+</rss>

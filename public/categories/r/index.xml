@@ -1,19 +1,54 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>R on A minimal Hugo website</title>
+    <title>R on Antonio Ahn&#39;s website</title>
     <link>//localhost:4321/categories/r/</link>
-    <description>Recent content in R on A minimal Hugo website</description>
+    <description>Recent content in R on Antonio Ahn&#39;s website</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Tue, 01 Dec 2020 21:13:14 -0500</lastBuildDate>
+    <lastBuildDate>Wed, 24 Jan 2024 00:00:00 +0000</lastBuildDate>
     <atom:link href="//localhost:4321/categories/r/index.xml" rel="self" type="application/rss+xml" />
     <item>
-      <title>Hello R Markdown</title>
-      <link>//localhost:4321/post/2020/12/01/hello-r-markdown/</link>
-      <pubDate>Tue, 01 Dec 2020 21:13:14 -0500</pubDate>
-      <guid>//localhost:4321/post/2020/12/01/hello-r-markdown/</guid>
-      <description>R Markdown This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see http://rmarkdown.rstudio.com.&#xA;You can embed an R code chunk like this:&#xA;summary(cars) ## speed dist ## Min. : 4.0 Min. : 2.00 ## 1st Qu.:12.0 1st Qu.: 26.00 ## Median :15.0 Median : 36.00 ## Mean :15.4 Mean : 42.98 ## 3rd Qu.</description>
+      <title>dotplot from multiple GSEA tests</title>
+      <link>//localhost:4321/posts/2024-01-24-dotplot-from-multiple-gsea-tests/</link>
+      <pubDate>Wed, 24 Jan 2024 00:00:00 +0000</pubDate>
+      <guid>//localhost:4321/posts/2024-01-24-dotplot-from-multiple-gsea-tests/</guid>
+      <description>load library and datasets library(DOSE) library(tidyverse) library(org.Hs.eg.db) library(clusterProfiler) library(DT) library(msigdbr) get ranks of genes # there are 5 comparisons. This dataset is from &amp;quot;Dietrich C, Trub A. INX-315, a selective CDK2 inhibitor, induces cell cycle arrest and senescence in solid tumors. Cancer Discov. 2023 Dec 4&amp;quot; DE_list %&amp;gt;% names ## [1] &amp;quot;PAR_LYvsDMSO&amp;quot; &amp;quot;PAR_ARCvsDMSO&amp;quot; &amp;quot;PAR_LY.ARCvsDMSO&amp;quot; &amp;quot;LYR_ARCvsDMSO&amp;quot; ## [5] &amp;quot;LYFR_ARCvsDMSO&amp;quot; ## $PAR_LYvsDMSO ## A1BG-AS1 A4GALT AAAS AACS AAGAB AAK1 ## -0.9150194 0.</description>
+    </item>
+    <item>
+      <title>Gene ID Conversion</title>
+      <link>//localhost:4321/posts/2024-01-07-gene-id-conversion/</link>
+      <pubDate>Sun, 07 Jan 2024 00:00:00 +0000</pubDate>
+      <guid>//localhost:4321/posts/2024-01-07-gene-id-conversion/</guid>
+      <description>Various ways to convert ENTREZ ID to gene symbols and vice versa&#xA;library(tidyverse) library(DOSE) load dataset # load a list of ENTREZ ID&#39;s data(geneList) geneList %&amp;gt;% head ## 4312 8318 10874 55143 55388 991 ## 4.572613 4.514594 4.418218 4.144075 3.876258 3.677857 length(names(geneList)) ## [1] 12495 biomart library(biomaRt) biomaRt::listEnsemblArchives() ## name date url version ## 1 Ensembl GRCh37 Feb 2014 https://grch37.ensembl.org GRCh37 ## 2 Ensembl 110 Jul 2023 https://jul2023.archive.ensembl.org 110 ## 3 Ensembl 109 Feb 2023 https://feb2023.</description>
+    </item>
+    <item>
+      <title>dotplot from multiple hyperogeometric tests</title>
+      <link>//localhost:4321/posts/2023-11-22-dotplot-from-multiple-hyperogeometric-tests/</link>
+      <pubDate>Wed, 22 Nov 2023 00:00:00 +0000</pubDate>
+      <guid>//localhost:4321/posts/2023-11-22-dotplot-from-multiple-hyperogeometric-tests/</guid>
+      <description>geneList %&amp;gt;% head ## 4312 8318 10874 55143 55388 991 ## 4.572613 4.514594 4.418218 4.144075 3.876258 3.677857 geneList %&amp;gt;% tail ## 10551 10974 79838 79901 57758 4969 ## -3.330760 -3.416798 -3.457221 -3.603467 -3.945467 -4.302655 # change ENTREZID to gene symbols names(geneList) &amp;lt;- mapIds(org.Hs.eg.db, keys=names(geneList), keytype=&amp;quot;ENTREZID&amp;quot;, columns=&amp;quot;SYMBOL&amp;quot;,column=&amp;quot;SYMBOL&amp;quot;) ## &#39;select()&#39; returned 1:1 mapping between keys and columns genes_list &amp;lt;- list() genes_list[[1]] &amp;lt;- names(geneList)[geneList &amp;gt; 2] genes_list[[2]] &amp;lt;- names(geneList)[geneList &amp;lt; -2] names(genes_list) &amp;lt;- paste(&amp;quot;comparison&amp;quot;, 1:length(genes_list), sep = &amp;quot;_&amp;quot;) genes_list %&amp;gt;% lapply(head) ## $comparison_1 ## [1] &amp;quot;MMP1&amp;quot; &amp;quot;CDC45&amp;quot; &amp;quot;NMU&amp;quot; &amp;quot;CDCA8&amp;quot; &amp;quot;MCM10&amp;quot; &amp;quot;CDC20&amp;quot; ## ## $comparison_2 ## [1] NA &amp;quot;COL16A1&amp;quot; &amp;quot;CACNA1D&amp;quot; &amp;quot;MAOB&amp;quot; &amp;quot;ADIPOQ&amp;quot; &amp;quot;VSTM4&amp;quot; genes_list %&amp;gt;% lapply(length) ## $comparison_1 ## [1] 110 ## ## $comparison_2 ## [1] 97 hypergeo_output &amp;lt;- genes_list %&amp;gt;% lapply(function(x){ x %&amp;gt;% enricher(TERM2GENE = MSigDB.</description>
+    </item>
+    <item>
+      <title>R one liner</title>
+      <link>//localhost:4321/posts/2023-11-22-r-one-liner/</link>
+      <pubDate>Wed, 22 Nov 2023 00:00:00 +0000</pubDate>
+      <guid>//localhost:4321/posts/2023-11-22-r-one-liner/</guid>
+      <description>rename all column names with an suffix H3K27acCounts_RBpeaks %&amp;gt;% mcols %&amp;gt;% as_tibble %&amp;gt;% dplyr::select(Conc:FDR,ID) %&amp;gt;% rename_with(.cols = everything(), function(x){paste0(x, &amp;quot;_H3K27ac&amp;quot;)}) </description>
+    </item>
+    <item>
+      <title>heat maps</title>
+      <link>//localhost:4321/posts/2023-10-18-heat-maps/</link>
+      <pubDate>Wed, 18 Oct 2023 00:00:00 +0000</pubDate>
+      <guid>//localhost:4321/posts/2023-10-18-heat-maps/</guid>
+      <description>library(ComplexHeatmap) library(tidyverse) library(pheatmap) library(circlize) ComplexHeatmap generate matrix (from https://jokergoo.github.io/ComplexHeatmap-reference/book/a-single-heatmap.html)&#xA;set.seed(123) nr1 &amp;lt;- 4 nr2 &amp;lt;- 8 nr3 &amp;lt;- 6 nr &amp;lt;- nr1 + nr2 + nr3 nc1 &amp;lt;- 6 nc2 &amp;lt;- 8 nc3 &amp;lt;- 10 nc &amp;lt;- nc1 + nc2 + nc3 mat &amp;lt;- cbind( rbind( matrix(rnorm(nr1 * nc1, mean = 1, sd = 0.5), nr = nr1), matrix(rnorm(nr2 * nc1, mean = 0, sd = 0.5), nr = nr2), matrix(rnorm(nr3 * nc1, mean = 0, sd = 0.</description>
+    </item>
+    <item>
+      <title>venn_diagram</title>
+      <link>//localhost:4321/posts/2023-10-14-venn-diagram/</link>
+      <pubDate>Sat, 14 Oct 2023 00:00:00 +0000</pubDate>
+      <guid>//localhost:4321/posts/2023-10-14-venn-diagram/</guid>
+      <description>load library library(rtracklayer) library(tidyverse) library(ChIPpeakAnno) library(ggsci) load peak files From &amp;ldquo;The ChIPpeakAnno user’s guide&amp;rdquo;&#xA;bed &amp;lt;- system.file(&amp;quot;extdata&amp;quot;, &amp;quot;MACS_output.bed&amp;quot;, package=&amp;quot;ChIPpeakAnno&amp;quot;) gr1 &amp;lt;- toGRanges(bed, format=&amp;quot;BED&amp;quot;, header=FALSE) gff &amp;lt;- system.file(&amp;quot;extdata&amp;quot;, &amp;quot;GFF_peaks.gff&amp;quot;, package=&amp;quot;ChIPpeakAnno&amp;quot;) gr2 &amp;lt;- toGRanges(gff, format=&amp;quot;GFF&amp;quot;, header=FALSE, skip=3) ## If you are importing files downloaded from ensembl, ## it will be better to import the files into a TxDb object, ## and then convert to GRanges by toGRanges. Here is the sample code: ## library(GenomicFeatures) ## txdb &amp;lt;- makeTxDbFromGFF(&#39;/config/binaries/R/4.</description>
     </item>
   </channel>
 </rss>

@@ -1,10 +1,10 @@
-baseurl: "/"
+baseurl: "https://antonioahn.rbind.io/"
 languageCode: "en-us"
-title: "A minimal Hugo website"
+title: "Antonio Ahn's website"
 theme: "hugo-xmin"
 googleAnalytics: ""
 disqusShortname: ""
-ignoreFiles: ["\\.Rmd$", "\\.Rmarkdown$", "_cache$"]
+ignoreFiles: ["\\.Rmd$", "\\.Rmarkdown$", "_cache$", "\\.rds$"]
 footnotereturnlinkcontents: "↩"
 
 permalinks:
@@ -16,8 +16,8 @@ menu:
     - name: Home
       url: ""
       weight: 1
-    - name: post
-      url: "post/"
+    - name: Posts
+      url: "posts/"
       weight: 2
     - name: About
       url: "about/"
@@ -27,13 +27,17 @@ menu:
       weight: 4
     - name: Tags
       url: "tags/"
-      weight: 
-    - name: Subscribe
-      url: "index.xml"
+      weight: 5
+    - name: Publications
+      url: "publication/"
+      weight: 6
+    - name: Resume
+      url: "resume/"
+      weight: 7
 
 params:
   description: "A website built through Hugo and blogdown."
-  footer: "&copy; [Yihui Xie](https://yihui.org) 2017 -- {Year} | [Github](https://github.com/yihui) | [Twitter](https://twitter.com/xieyihui)"
+  footer: "[Github](https://github.com/AntonioAhn) | [Twitter](https://twitter.com/AntonioAhnNZ)"
 
 markup:
   highlight:

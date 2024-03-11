@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=443&amp;path=livereload" data-no-instant defer></script>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>bash one liner | Antonio Ahn&#39;s website</title>
+    <link rel="stylesheet" href="../../css/style.css" />
+    <link rel="stylesheet" href="../../css/fonts.css" />
+    
+  </head>
+
+  <body>
+    <nav>
+    <ul class="menu">
+      
+      <li><a href="../../">Home</a></li>
+      
+      <li><a href="../../posts/">Posts</a></li>
+      
+      <li><a href="../../about/">About</a></li>
+      
+      <li><a href="../../categories/">Categories</a></li>
+      
+      <li><a href="../../tags/">Tags</a></li>
+      
+      <li><a href="../../publication/">Publications</a></li>
+      
+      <li><a href="../../resume/">Resume</a></li>
+      
+    </ul>
+    <hr/>
+    </nav>
+
+<div class="article-meta">
+<h1><span class="title">bash one liner</span></h1>
+
+<h2 class="date">2023/11/16</h2>
+</div>
+
+<main>
+<p>Just some bash notes which i find very useful but i keep forgetting.</p>
+<h1 id="find">Find</h1>
+<pre><code class="language-bash"># find and grep
+find . -name &quot;*.Rmd&quot; | xargs grep &quot;enricher&quot;
+
+# find and execute
+find . -name &quot;*rawcounts.csv&quot; -exec scp -r -i ~/.ssh/id_transfer {} transfer@pmcc-transfer-server.petermac.org.au:/data/transfer/antonio.ahn/raw_counts_csv \;
+
+# find multiple files in a directory
+find $bam_files_dir \( -name &quot;*MDA-MB-453*_unique_aln.bam&quot; -o -name &quot;*M453*_unique_aln.bam&quot; \)
+# then use that to merge 
+samtools merge m453_DMSO_7D_merged.bam $(find $bam_files_dir -name &quot;*MDA-MB-453*_unique_aln.bam&quot; | grep -E 'DMSO_7d|LY_7d|LYR1000')
+</code></pre>
+<h1 id="xarg">xarg</h1>
+<pre><code class="language-bash"># copy pasting all files except for the 3 named into a different directory
+ls  | grep -v -E '0.choosing_strand|subread|archived' | xargs -I {} cp -r &quot;{}&quot; /new/directory
+</code></pre>
+<h1 id="xarg-2">xarg 2</h1>
+<p>from /researchers/antonio.ahn/Goel_Labmembers/CatherinePiggin/2021/5.CutandTag_LY7DvsDMSO_July2021/workflow</p>
+<pre><code class="language-bash">for i in H3K27ac H3K4me1 H3K9me3 H3K27me3;
+do
+array=($(ls $SEACR_dir/*${i}*.bed))
+first_sample_names=$(echo ${array[0]} | awk -F '/' '{print $NF}')
+rest_sample_names=$(printf '%s\n' &quot;${array[@]:1}&quot; | awk -F '/' '{print $NF}')
+echo &quot;first sample names are $first_sample_names&quot;
+echo &quot;second sample names are $rest_sample_names&quot; 
+bedtools intersect -wa -wb -a ${array[0]} -b ${array[@]:1} &gt; $output_dir/intersect_test_${i}.bed;
+
+done
+</code></pre>
+<h1 id="sample-names">sample names</h1>
+<pre><code class="language-bash"># For ATAC peaks (LYR minus DMSO)
+for i in H3K27ac H3K4me1 H3K9me3 H3K27me3;
+do
+sample_names=`ls ${BWpath_cutandtag}/*${i}*.bw | awk -F '/' '{print $NF}' | awk -F '-' 'OFS=&quot;_&quot; {print $3,$4,$5}'`
+bigwig_names=`ls ${BWpath_cutandtag}/*${i}*.bw`
+
+echo &quot;sample names are ${sample_names}&quot;
+echo &quot;bigwig names are ${bigwig_names}&quot;
+
+computeMatrix reference-point --referencePoint center \
+-b 2000 -a 2000 \
+-R $BEDpath/merged_${i}.bed \
+-S `ls $BWpath_cutandtag/*${i}*.bw` \
+--skipZeros \
+--missingDataAsZero \
+--sortRegions descend \
+-p 11 \
+-o $output_path/cutandtag_${i}_matrix.gz
+
+plotHeatmap -m  $output_path/cutandtag_${i}_matrix.gz \
+-out $output_path/cutandtag_${i}.png  \
+--colorMap Blues \
+--dpi 300 \
+--refPointLabel center \
+--samplesLabel $sample_names \
+--yAxisLabel &quot;${i} enrichment&quot; \
+--regionsLabel merged.bed;
+done
+</code></pre>
+<h1 id="matching-different-patterns-for-listing-files">matching different patterns for listing files</h1>
+<pre><code class="language-r"># This matches file names with either DMSO_7d.*bam or LY_7d.*bam$inside the name and both ends with .*bam or LY_7d.bam
+bamReads_1 &lt;- file.path(&quot;/researchers/antonio.ahn/1.BostonData_August2020/1.ATACseq/results_250820_set1&quot;, list.files(path = &quot;/researchers/antonio.ahn/1.BostonData_August2020/1.ATACseq/results_250820_set1&quot;, pattern = &quot;DMSO_7d.*bam$|LY_7d.*bam$&quot;))
+</code></pre>
+<pre><code class="language-bash"># But in bash you do this 
+ls *{DMSO_7d,LY_7d}*.bam
+
+# For gsub i also used s* (at https://stackoverflow.com/questions/17166618/regular-expression-containing-one-word-or-another)
+
+</code></pre>
+<h1 id="print-only-a-subset-or-make-array">print only a subset or make array</h1>
+<p>file names are 001-sample-treated-TF1.bam, 002-sample-treated-TF1.bam .. 017-sample-treated-TF1.bam</p>
+<pre><code class="language-bash">echo $(printf &quot;%03d-MCF7-*.bam &quot; {1..17})
+</code></pre>
+<pre><code>## 001-MCF7-*.bam 002-MCF7-*.bam 003-MCF7-*.bam 004-MCF7-*.bam 005-MCF7-*.bam 006-MCF7-*.bam 007-MCF7-*.bam 008-MCF7-*.bam 009-MCF7-*.bam 010-MCF7-*.bam 011-MCF7-*.bam 012-MCF7-*.bam 013-MCF7-*.bam 014-MCF7-*.bam 015-MCF7-*.bam 016-MCF7-*.bam 017-MCF7-*.bam
+</code></pre>
+
+</main>
+
+  <footer>
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/katex/dist/katex.min.css">
+<script src="//cdn.jsdelivr.net/combine/npm/katex/dist/katex.min.js,npm/katex/dist/contrib/auto-render.min.js,npm/@xiee/utils/js/render-katex.js" defer></script>
+
+<script src="//cdn.jsdelivr.net/npm/@xiee/utils/js/center-img.min.js" defer></script>
+
+  
+  <hr/>
+  <a href="https://github.com/AntonioAhn">Github</a> | <a href="https://twitter.com/AntonioAhnNZ">Twitter</a>
+  
+  </footer>
+  </body>
+</html>
+

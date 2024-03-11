@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=443&amp;path=livereload" data-no-instant defer></script>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>heat maps | Antonio Ahn&#39;s website</title>
+    <link rel="stylesheet" href="../../css/style.css" />
+    <link rel="stylesheet" href="../../css/fonts.css" />
+    
+  </head>
+
+  <body>
+    <nav>
+    <ul class="menu">
+      
+      <li><a href="../../">Home</a></li>
+      
+      <li><a href="../../posts/">Posts</a></li>
+      
+      <li><a href="../../about/">About</a></li>
+      
+      <li><a href="../../categories/">Categories</a></li>
+      
+      <li><a href="../../tags/">Tags</a></li>
+      
+      <li><a href="../../publication/">Publications</a></li>
+      
+      <li><a href="../../resume/">Resume</a></li>
+      
+    </ul>
+    <hr/>
+    </nav>
+
+<div class="article-meta">
+<h1><span class="title">heat maps</span></h1>
+
+<h2 class="date">2023/10/18</h2>
+</div>
+
+<main>
+<pre><code class="language-r">library(ComplexHeatmap)
+library(tidyverse)
+library(pheatmap)
+library(circlize)
+</code></pre>
+<h1 id="complexheatmap">ComplexHeatmap</h1>
+<p>generate matrix (from <a href="https://jokergoo.github.io/ComplexHeatmap-reference/book/a-single-heatmap.html">https://jokergoo.github.io/ComplexHeatmap-reference/book/a-single-heatmap.html</a>)</p>
+<pre><code class="language-r">set.seed(123)
+nr1 &lt;- 4
+nr2 &lt;- 8
+nr3 &lt;- 6
+nr &lt;- nr1 + nr2 + nr3
+nc1 &lt;- 6
+nc2 &lt;- 8
+nc3 &lt;- 10
+nc &lt;- nc1 + nc2 + nc3
+mat &lt;- cbind(
+  rbind(
+    matrix(rnorm(nr1 * nc1, mean = 1, sd = 0.5), nr = nr1),
+    matrix(rnorm(nr2 * nc1, mean = 0, sd = 0.5), nr = nr2),
+    matrix(rnorm(nr3 * nc1, mean = 0, sd = 0.5), nr = nr3)
+  ),
+  rbind(
+    matrix(rnorm(nr1 * nc2, mean = 0, sd = 0.5), nr = nr1),
+    matrix(rnorm(nr2 * nc2, mean = 1, sd = 0.5), nr = nr2),
+    matrix(rnorm(nr3 * nc2, mean = 0, sd = 0.5), nr = nr3)
+  ),
+  rbind(
+    matrix(rnorm(nr1 * nc3, mean = 0.5, sd = 0.5), nr = nr1),
+    matrix(rnorm(nr2 * nc3, mean = 0.5, sd = 0.5), nr = nr2),
+    matrix(rnorm(nr3 * nc3, mean = 1, sd = 0.5), nr = nr3)
+  )
+)
+</code></pre>
+<pre><code class="language-r"># color range
+color_bar_range &lt;- max(abs(min(mat)), abs(max(mat)))
+
+col.pan &lt;- colorRamp2(c(-color_bar_range, -color_bar_range + 2, 0, color_bar_range - 2, color_bar_range), c(&quot;black&quot;, &quot;dodgerblue3&quot;, &quot;white&quot;, &quot;orange&quot;, &quot;red&quot;))
+
+Heatmap(mat,
+  name = &quot;z-score&quot;,
+  col = col.pan,
+  # top_annotation = column_ha,
+  cluster_columns = FALSE,
+  row_km = 2, show_row_names = TRUE, row_names_gp = gpar(fontsize = 7)
+)
+</code></pre>
+<img src="../../posts/2023-10-18-heat-maps/index_files/figure-html/unnamed-chunk-3-1.png" width="672" />
+<h2 id="example-function">example function</h2>
+<pre><code class="language-r">genes_input &lt;- filter(h_gene_sets, gs_name == &quot;HALLMARK_E2F_TARGETS&quot;)$gene_symbol
+
+
+make_heatmap_symbol_CHM &lt;- function(genes_input,
+                                    turnon_rownames = FALSE, rownames_size = 7,
+                                    turnon_clusterrows = TRUE, show_barplot = FALSE,
+                                    kmeansrows_number = 1) {
+  # only get the genes that interesct between genes_input and the genes in the normalised matrix
+  genes_input &lt;- intersect(genes_input, rownames(norm_mat_symbol))
+  heatmap_mat &lt;- norm_mat_symbol[genes_input, ]
+  # take out any rows with all zero's in the rows. This sometimes happens because when i only select out the PAR group, all zeros but its in the matrix because in the LYFR it is expressed. These are quite interesting... SASP genes that are not expressed at PAR but only expressed in LYFR. I wonder if these are expressed at PAR treated with LY + Fulv. shouldn't be? cuz Fulv brings most things down ...
+  index &lt;- apply(heatmap_mat, 1, function(row) all(row == 0))
+  heatmap_mat &lt;- heatmap_mat[!index, ]
+  # generate z-score
+  scaled.mat &lt;- t(scale(t(heatmap_mat)))
+  ##### ----------------------------------------------------------------------------------------------------
+  # column colors
+  column_color_treatment &lt;- col_npg5[1:4]
+  # column_color_time &lt;- ggsci::pal_simpsons()(8)[1:8]
+
+  names(column_color_treatment) &lt;- unique(sample_information$treatment)
+  # names(column_color_time) &lt;- unique(sample_information$time)
+
+  anno_colors &lt;- list(treatment = column_color_treatment)
+  # time = column_color_time)
+  # column annotations
+  column_ha &lt;- HeatmapAnnotation(
+    mean = anno_barplot(colMeans(scaled.mat), height = unit(2, &quot;cm&quot;)),
+    treatment = sample_information$treatment,
+    # time = sample_information$time,
+    col = anno_colors
+  )
+  # column split
+  column_split &lt;- sample_information$treatment
+  ##### ----------------------------------------------------------------------------------------------------
+  # cell colors
+  # col.pan &lt;-  colorRampPalette(c(&quot;black&quot;,&quot;dodgerblue3&quot;, &quot;white&quot;, &quot;orange&quot;,&quot;red&quot;))(100)
+  # color range
+  color_bar_range &lt;- max(abs(min(scaled.mat)), abs(max(scaled.mat)))
+  # ceiling rounds up (to integer)
+  color_bar_range &lt;- ceiling(color_bar_range)
+  col.pan &lt;- colorRamp2(c(-color_bar_range, -color_bar_range + 2, 0, color_bar_range - 2, color_bar_range), c(&quot;black&quot;, &quot;dodgerblue3&quot;, &quot;white&quot;, &quot;orange&quot;, &quot;red&quot;))
+  ##### ----------------------------------------------------------------------------------------------------
+  # color range
+  color_bar_range &lt;- max(abs(min(scaled.mat)), abs(max(scaled.mat)))
+  # ceiling rounds up (to integer)
+  color_bar_range &lt;- ceiling(color_bar_range)
+  ##### ----------------------------------------------------------------------------------------------------
+  # make heatmap
+  Heatmap(scaled.mat,
+    name = &quot;z-score&quot;,
+    col = col.pan,
+    top_annotation = column_ha,
+    cluster_columns = FALSE,
+    row_km = kmeansrows_number, show_row_names = turnon_rownames, row_names_gp = gpar(fontsize = rownames_size),
+    column_split = sample_information$treatment
+  )
+}
+# heatmap_legend_param = list(at = c(-5, 0, 5)
+make_heatmap_symbol_CHM(filter(h_gene_sets, gs_name == &quot;HALLMARK_E2F_TARGETS&quot;)$gene_symbol, kmeansrows_number = 1)
+</code></pre>
+<h1 id="pheatmap">pheatmap</h1>
+<pre><code class="language-r">col.pan &lt;- colorRampPalette(c(&quot;black&quot;, &quot;dodgerblue3&quot;, &quot;white&quot;, &quot;orange&quot;, &quot;red&quot;))(100)
+
+pheatmap::pheatmap(mat, col = col.pan, cluster_rows = TRUE, cluster_cols = FALSE, show_rownames = TRUE, show_colnames = T,  border_color = FALSE, legend = T, fontsize_row = 7, treeheight_col = 20, breaks = seq(-color_bar_range, color_bar_range, length.out = 100), clustering_distance_rows = &quot;euclidean&quot;, clustering_method = &quot;complete&quot;)
+</code></pre>
+<img src="../../posts/2023-10-18-heat-maps/index_files/figure-html/unnamed-chunk-5-1.png" width="672" />
+<h2 id="example-function-1">example function</h2>
+<pre><code class="language-r">make_heatmap_symbol &lt;- function(genes_input, turnon_rownames = FALSE, rownames_size = 7, turnon_clusterrows = TRUE) {
+  # only get the genes that interesct between genes_input and the genes in the normalised matrix
+  genes_input &lt;- intersect(genes_input, rownames(norm_mat_DOXvsDMSO_symbol))
+  # select out the matrix with only the genes of interest
+  heatmap_mat &lt;- norm_mat_DOXvsDMSO_symbol[genes_input, ]
+  # generate z-score
+  scaled.mat &lt;- t(scale(t(heatmap_mat)))
+  ##### ----------------------------------------------------------------------------------------------------
+  # annotate column
+  columnfactor &lt;- sample_information_DOXvsDMSO$knockout_clone_treatment
+  annotation_column &lt;- data.frame(row.names = colnames(scaled.mat), group = columnfactor)
+  ##### ----------------------------------------------------------------------------------------------------
+  # colors
+  # cell colors
+  # col.pan &lt;- colorRampPalette(c(&quot;purple&quot;,&quot;black&quot;, &quot;yellow&quot;))(100)
+  col.pan &lt;- colorRampPalette(c(&quot;black&quot;, &quot;dodgerblue3&quot;, &quot;white&quot;, &quot;orange&quot;, &quot;red&quot;))(100)
+  # column colors
+  column_color &lt;- c(brewer.pal(8, &quot;Paired&quot;), ggsci::pal_simpsons()(4))
+  names(column_color) &lt;- unique(annotation_column$group)
+  anno_colors &lt;- list(group = column_color)
+  ##### ----------------------------------------------------------------------------------------------------
+  # color bar range
+  # get the maximum + minimum value, make it absolute numbers and get the highest number. Set this as the range
+  color_bar_range &lt;- max(abs(min(scaled.mat)), abs(max(scaled.mat)))
+  # ceiling rounds up (to integer)
+  color_bar_range &lt;- ceiling(color_bar_range)
+  ##### ----------------------------------------------------------------------------------------------------
+  pheatmap::pheatmap(scaled.mat, col = col.pan, cluster_rows = turnon_clusterrows, cluster_cols = F, show_rownames = turnon_rownames, show_colnames = T, annotation_col = annotation_column, border_color = FALSE, legend = T, fontsize_row = rownames_size, annotation_colors = anno_colors, treeheight_col = 20, breaks = seq(-color_bar_range, color_bar_range, length.out = 100), clustering_distance_rows = &quot;euclidean&quot;, clustering_method = &quot;complete&quot;)
+}
+</code></pre>
+
+</main>
+
+  <footer>
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/katex/dist/katex.min.css">
+<script src="//cdn.jsdelivr.net/combine/npm/katex/dist/katex.min.js,npm/katex/dist/contrib/auto-render.min.js,npm/@xiee/utils/js/render-katex.js" defer></script>
+
+<script src="//cdn.jsdelivr.net/npm/@xiee/utils/js/center-img.min.js" defer></script>
+
+  
+  <hr/>
+  <a href="https://github.com/AntonioAhn">Github</a> | <a href="https://twitter.com/AntonioAhnNZ">Twitter</a>
+  
+  </footer>
+  </body>
+</html>
+

@@ -2,108 +2,70 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
-    <loc>//localhost:4321/</loc>
-    <lastmod>2024-03-11T00:00:00+00:00</lastmod>
-  </url><url>
-    <loc>//localhost:4321/post/</loc>
-    <lastmod>2024-03-11T00:00:00+00:00</lastmod>
-  </url><url>
-    <loc>//localhost:4321/post/2024/03/11/test/</loc>
-    <lastmod>2024-03-11T00:00:00+00:00</lastmod>
-  </url><url>
-    <loc>//localhost:4321/post/2024/02/01/learning-bash-functions/</loc>
+    <loc>//localhost:4321/categories/bash/</loc>
     <lastmod>2024-02-01T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>//localhost:4321/post/2024/01/20/collection-of-bash-scripts/</loc>
-    <lastmod>2024-01-20T00:00:00+00:00</lastmod>
-  </url><url>
-    <loc>//localhost:4321/post/2024/01/12/bash-scripts-for-lexogen-quantseq-3prime-utr-mrna-seq/</loc>
-    <lastmod>2024-01-12T00:00:00+00:00</lastmod>
-  </url><url>
-    <loc>//localhost:4321/post/2024/01/07/gene-id-conversion/</loc>
-    <lastmod>2024-01-07T00:00:00+00:00</lastmod>
-  </url><url>
-    <loc>//localhost:4321/post/2023/11/22/dotplot-from-multiple-hyperogeometric-tests/</loc>
-    <lastmod>2023-11-22T00:00:00+00:00</lastmod>
-  </url><url>
-    <loc>//localhost:4321/post/2023/11/22/r-one-liner/</loc>
-    <lastmod>2023-11-22T00:00:00+00:00</lastmod>
-  </url><url>
-    <loc>//localhost:4321/post/2023/11/16/bash-one-liner/</loc>
-    <lastmod>2023-11-16T00:00:00+00:00</lastmod>
-  </url><url>
-    <loc>//localhost:4321/post/2023/10/18/heat-maps/</loc>
-    <lastmod>2023-10-18T00:00:00+00:00</lastmod>
-  </url><url>
-    <loc>//localhost:4321/post/2023/10/16/uncompressing-files/</loc>
-    <lastmod>2023-10-16T00:00:00+00:00</lastmod>
-  </url><url>
-    <loc>//localhost:4321/post/2023/10/14/venn_diagram/</loc>
-    <lastmod>2023-10-14T00:00:00+00:00</lastmod>
-  </url><url>
     <loc>//localhost:4321/categories/</loc>
-    <lastmod>2020-12-01T21:13:14-05:00</lastmod>
+    <lastmod>2024-02-01T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>//localhost:4321/post/2020/12/01/hello-r-markdown/</loc>
-    <lastmod>2020-12-01T21:13:14-05:00</lastmod>
+    <loc>//localhost:4321/</loc>
+    <lastmod>2024-02-01T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>//localhost:4321/tags/plot/</loc>
-    <lastmod>2020-12-01T21:13:14-05:00</lastmod>
+    <loc>//localhost:4321/posts/2024-02-01-learning-bash-functions/</loc>
+    <lastmod>2024-02-01T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>//localhost:4321/posts/</loc>
+    <lastmod>2024-02-01T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>//localhost:4321/posts/2024-01-24-dotplot-from-multiple-gsea-tests/</loc>
+    <lastmod>2024-01-24T00:00:00+00:00</lastmod>
   </url><url>
     <loc>//localhost:4321/categories/r/</loc>
-    <lastmod>2020-12-01T21:13:14-05:00</lastmod>
+    <lastmod>2024-01-24T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>//localhost:4321/tags/r-markdown/</loc>
-    <lastmod>2020-12-01T21:13:14-05:00</lastmod>
+    <loc>//localhost:4321/posts/2024-01-20-collection-of-bash-scripts/</loc>
+    <lastmod>2024-01-20T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>//localhost:4321/tags/regression/</loc>
-    <lastmod>2020-12-01T21:13:14-05:00</lastmod>
+    <loc>//localhost:4321/posts/2024-01-12-bashscripts-lexogen-quantseq-3prime-utr-mrna-seq/</loc>
+    <lastmod>2024-01-12T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>//localhost:4321/posts/2024-01-07-gene-id-conversion/</loc>
+    <lastmod>2024-01-07T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>//localhost:4321/posts/2023-11-22-dotplot-from-multiple-hyperogeometric-tests/</loc>
+    <lastmod>2023-11-22T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>//localhost:4321/tags/one-liner/</loc>
+    <lastmod>2023-11-22T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>//localhost:4321/tags/plots/</loc>
+    <lastmod>2023-11-22T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>//localhost:4321/posts/2023-11-22-r-one-liner/</loc>
+    <lastmod>2023-11-22T00:00:00+00:00</lastmod>
   </url><url>
     <loc>//localhost:4321/tags/</loc>
-    <lastmod>2020-12-01T21:13:14-05:00</lastmod>
+    <lastmod>2023-11-22T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>//localhost:4321/note/2017/06/14/another-note/</loc>
-    <lastmod>2017-06-14T00:00:00+00:00</lastmod>
+    <loc>//localhost:4321/posts/2023-10-16-bash-one-liner/</loc>
+    <lastmod>2023-11-16T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>//localhost:4321/categories/example/</loc>
-    <lastmod>2017-06-14T00:00:00+00:00</lastmod>
+    <loc>//localhost:4321/posts/2023-10-18-heat-maps/</loc>
+    <lastmod>2023-10-18T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>//localhost:4321/note/</loc>
-    <lastmod>2017-06-14T00:00:00+00:00</lastmod>
+    <loc>//localhost:4321/posts/2023-10-16-uncompressing-files/</loc>
+    <lastmod>2023-10-16T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>//localhost:4321/tags/tutorial/</loc>
-    <lastmod>2017-06-14T00:00:00+00:00</lastmod>
+    <loc>//localhost:4321/tags/overlap/</loc>
+    <lastmod>2023-10-14T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>//localhost:4321/note/2017/06/13/a-quick-note/</loc>
-    <lastmod>2017-06-13T00:00:00+00:00</lastmod>
-  </url><url>
-    <loc>//localhost:4321/post/2016/02/14/a-plain-markdown-post/</loc>
-    <lastmod>2016-02-14T00:00:00+00:00</lastmod>
-  </url><url>
-    <loc>//localhost:4321/tags/blogdown/</loc>
-    <lastmod>2016-02-14T00:00:00+00:00</lastmod>
-  </url><url>
-    <loc>//localhost:4321/categories/hugo/</loc>
-    <lastmod>2016-02-14T00:00:00+00:00</lastmod>
-  </url><url>
-    <loc>//localhost:4321/tags/markdown/</loc>
-    <lastmod>2016-02-14T00:00:00+00:00</lastmod>
-  </url><url>
-    <loc>//localhost:4321/tags/mathjax/</loc>
-    <lastmod>2016-02-14T00:00:00+00:00</lastmod>
-  </url><url>
-    <loc>//localhost:4321/tags/pandoc/</loc>
-    <lastmod>2016-02-14T00:00:00+00:00</lastmod>
-  </url><url>
-    <loc>//localhost:4321/tags/rstudio/</loc>
-    <lastmod>2016-02-14T00:00:00+00:00</lastmod>
-  </url><url>
-    <loc>//localhost:4321/post/2015/07/23/lorem-ipsum/</loc>
-    <lastmod>2015-07-23T00:00:00+00:00</lastmod>
-  </url><url>
-    <loc>//localhost:4321/post/2015/07/23/test/</loc>
-    <lastmod>2015-07-23T00:00:00+00:00</lastmod>
+    <loc>//localhost:4321/posts/2023-10-14-venn-diagram/</loc>
+    <lastmod>2023-10-14T00:00:00+00:00</lastmod>
   </url><url>
     <loc>//localhost:4321/about/</loc>
+  </url><url>
+    <loc>//localhost:4321/resume/</loc>
+  </url><url>
+    <loc>//localhost:4321/publication/</loc>
   </url>
 </urlset>

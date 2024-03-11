@@ -1,0 +1,71 @@
+---
+title: Gene ID Conversion
+author: ''
+date: '2024-01-07'
+slug: []
+categories: ["R"]
+tags: []
+excerpt: ""
+---
+
+Various ways to convert ENTREZ ID to gene symbols and vice versa
+
+
+```r
+library(tidyverse)
+library(DOSE)
+```
+
+# load dataset
+
+
+```r
+# load a list of ENTREZ ID's
+data(geneList)
+geneList %>% head
+```
+
+```
+##     4312     8318    10874    55143    55388      991 
+## 4.572613 4.514594 4.418218 4.144075 3.876258 3.677857
+```
+
+```r
+length(names(geneList))
+```
+
+```
+## [1] 12495
+```
+
+# biomart
+
+
+```r
+library(biomaRt)
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

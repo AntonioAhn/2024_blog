@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Overlap on Antonio Ahn&#39;s website</title>
+    <link>//localhost:4321/tags/overlap/</link>
+    <description>Recent content in Overlap on Antonio Ahn&#39;s website</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Sat, 14 Oct 2023 00:00:00 +0000</lastBuildDate>
+    <atom:link href="//localhost:4321/tags/overlap/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>venn_diagram</title>
+      <link>//localhost:4321/posts/2023-10-14-venn-diagram/</link>
+      <pubDate>Sat, 14 Oct 2023 00:00:00 +0000</pubDate>
+      <guid>//localhost:4321/posts/2023-10-14-venn-diagram/</guid>
+      <description>load library library(rtracklayer) library(tidyverse) library(ChIPpeakAnno) library(ggsci) load peak files From &amp;ldquo;The ChIPpeakAnno user’s guide&amp;rdquo;&#xA;bed &amp;lt;- system.file(&amp;quot;extdata&amp;quot;, &amp;quot;MACS_output.bed&amp;quot;, package=&amp;quot;ChIPpeakAnno&amp;quot;) gr1 &amp;lt;- toGRanges(bed, format=&amp;quot;BED&amp;quot;, header=FALSE) gff &amp;lt;- system.file(&amp;quot;extdata&amp;quot;, &amp;quot;GFF_peaks.gff&amp;quot;, package=&amp;quot;ChIPpeakAnno&amp;quot;) gr2 &amp;lt;- toGRanges(gff, format=&amp;quot;GFF&amp;quot;, header=FALSE, skip=3) ## If you are importing files downloaded from ensembl, ## it will be better to import the files into a TxDb object, ## and then convert to GRanges by toGRanges. Here is the sample code: ## library(GenomicFeatures) ## txdb &amp;lt;- makeTxDbFromGFF(&#39;/config/binaries/R/4.</description>
+    </item>
+  </channel>
+</rss>

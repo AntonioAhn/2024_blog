@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=443&amp;path=livereload" data-no-instant defer></script>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Uncompressing files | Antonio Ahn&#39;s website</title>
+    <link rel="stylesheet" href="../../css/style.css" />
+    <link rel="stylesheet" href="../../css/fonts.css" />
+    
+  </head>
+
+  <body>
+    <nav>
+    <ul class="menu">
+      
+      <li><a href="../../">Home</a></li>
+      
+      <li><a href="../../posts/">Posts</a></li>
+      
+      <li><a href="../../about/">About</a></li>
+      
+      <li><a href="../../categories/">Categories</a></li>
+      
+      <li><a href="../../tags/">Tags</a></li>
+      
+      <li><a href="../../publication/">Publications</a></li>
+      
+      <li><a href="../../resume/">Resume</a></li>
+      
+    </ul>
+    <hr/>
+    </nav>
+
+<div class="article-meta">
+<h1><span class="title">Uncompressing files</span></h1>
+
+<h2 class="date">2023/10/16</h2>
+</div>
+
+<main>
+<p>I always forget which codes to use to uncompress different compressed file types.</p>
+<p>This <a href="https://unix.stackexchange.com/questions/94837/having-trouble-uncompressing-a-few-files">post</a> was really helpful.</p>
+<pre><code class="language-bash">file file.zip 
+# file.zip: Zip archive data, at least v1.0 to extract
+# solution: use unzip.
+
+file file.rar 
+# file.rar: RAR archive data, v1d, os: Win32
+# solution: use unrar.
+
+file file.7z 
+# file.7z: 7-zip archive data, version 0.3
+# solution: use 7z.
+
+file file.tgz 
+# file.tgz: gzip compressed data, from Unix, last modified: Sun Oct 13 01:14:43 2013
+# solution: use tar zxvf.
+
+file file.tar.bz2 
+# file.tar.bz2: bzip2 compressed data, block size = 900k
+# solution: use tar jxvf.
+
+file afile.gz 
+# file.gz: gzip compressed data, was &quot;afile&quot;, from Unix, last modified: Sun Oct 13 01:10:19 2013
+# solution: use gunzip.
+
+file file.tar
+# file.tar: POSIX tar archive
+# solution: use tar xvf file.tar
+</code></pre>
+
+</main>
+
+  <footer>
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/katex/dist/katex.min.css">
+<script src="//cdn.jsdelivr.net/combine/npm/katex/dist/katex.min.js,npm/katex/dist/contrib/auto-render.min.js,npm/@xiee/utils/js/render-katex.js" defer></script>
+
+<script src="//cdn.jsdelivr.net/npm/@xiee/utils/js/center-img.min.js" defer></script>
+
+  
+  <hr/>
+  <a href="https://github.com/AntonioAhn">Github</a> | <a href="https://twitter.com/AntonioAhnNZ">Twitter</a>
+  
+  </footer>
+  </body>
+</html>
+

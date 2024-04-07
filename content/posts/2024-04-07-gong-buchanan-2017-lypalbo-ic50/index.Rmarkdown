@@ -1,23 +1,24 @@
 ---
-title: LY Palbo IC50 analysis of pan cancer cell lines (Gong Buchanan 2017)
+title: "LY Palbo IC50 analysis of pan cancer cell lines (Gong Buchanan 2017)"
 author: ''
-date: '2024-04-07'
-slug: gong-buchanan-2017-lypalbo-ic50
-categories: ["R"]
-tags: ["project"]
+date: "2024-04-07"
+slug: "gong-buchanan-2017-lypalbo-ic50"
+categories: R
+tags: project
 ---
 
 The data is from this paper:
-Gong X, Litchfield LM, Webster Y, Chio LC, Wong SS, Stewart TR, Dowless M, Dempsey J, Zeng Y, Torres R, Boehnke K, Mur C, Marugán C, Baquero C, Yu C, Bray SM, Wulur IH, Bi C, Chu S, Qian HR, Iversen PW, Merzoug FF, Ye XS, Reinhard C, De Dios A, Du J, Caldwell CW, Lallena MJ, Beckmann RP, Buchanan SG. Genomic Aberrations that Activate D-type Cyclins Are Associated with Enhanced Sensitivity to the CDK4 and CDK6 Inhibitor Abemaciclib. Cancer Cell. 2017 Dec 11;32(6):761-776.e6. doi: 10.1016/j.ccell.2017.11.006. PMID: 29232554.
+- Gong X, Litchfield LM, Webster Y, Chio LC, Wong SS, Stewart TR, Dowless M, Dempsey J, Zeng Y, Torres R, Boehnke K, Mur C, Marugán C, Baquero C, Yu C, Bray SM, Wulur IH, Bi C, Chu S, Qian HR, Iversen PW, Merzoug FF, Ye XS, Reinhard C, De Dios A, Du J, Caldwell CW, Lallena MJ, Beckmann RP, Buchanan SG. Genomic Aberrations that Activate D-type Cyclins Are Associated with Enhanced Sensitivity to the CDK4 and CDK6 Inhibitor Abemaciclib. Cancer Cell. 2017 Dec 11;32(6):761-776.e6. doi: 10.1016/j.ccell.2017.11.006. PMID: 29232554.
 
 ```{r setup, include=FALSE}
 library(tidyverse)
 library(VennDiagram)
 library(ggvenn)
 library(ggrepel)
+library(DT)
 ```
 
-```{r}
+```{r echo=FALSE}
 options(ggrepel.max.overlaps = Inf)
 ```
 
@@ -38,8 +39,8 @@ Palbo_data <- read_csv(file.path(file_dir, "Buchanan_AbsIC50Data_Palbo.csv"))
 LY_data %>% dim
 Palbo_data %>% dim
 
-LY_data %>% head
-Palbo_data %>% head
+LY_data %>% DT::datatable()
+Palbo_data %>% DT::datatable()
 ```
 
 
@@ -49,12 +50,12 @@ Palbo_data %>% head
 LY_data <- LY_data %>% dplyr::rename("cell_line" = "Cell Line",
                                      "cancer_type" = "Cancer Type",
                                      "IC50" = "Abs IC50 (µM) Abemaciclib")
-#                                     "RB1_status" = "RB1 mut")
+
 
 Palbo_data <- Palbo_data %>% dplyr::rename("cell_line" = "Cell Line",
                                            "cancer_type" = "Cancer Type",
                                            "IC50" = "Abs IC50 (µM) Palbociclib")
-#                                           "RB1_status" = "RB1 mut")
+
 ```
 
 ```{r}
@@ -80,7 +81,7 @@ combined_data$cancer_type_Palbo %>% is.na %>% table
 combined_data$IC50_Palbo[is.na(combined_data$IC50_Palbo)] = 0
 ```
 
-# overlap
+# overlap of cell lines treated with LY and Palbo
 
 ```{r}
 list_i <- list(LY_data = LY_data$cell_line, 
@@ -90,6 +91,7 @@ list_i <- list(LY_data = LY_data$cell_line,
 LY_Palbo_overlap <- calculate.overlap(x = list_i)
 ```
 
+For most cell lines, the IC50 value is avaialble for both LY and Palbo. 
 ```{r}
 ggvenn(
   list_i, 
@@ -111,15 +113,19 @@ cancer_type_df %>% ggplot(aes(x = cancer_type, y = frequency, fill = cancer_type
   theme_bw() + 
   theme(legend.position = "none", legend.title = element_blank() ,axis.text.x = element_text(angle = 45, hjust = 1))
 
+```
 
+```{r echo=FALSE}
 cancer_order <- cancer_type_df$cancer_type %>% levels
 ```
 
 # IC50 summary
 
-```{r fig.height = 12, fig.width=10}
+```{r echo=FALSE, results=FALSE}
 combined_data$cancer_type_LY %>% table %>% sort(decreasing = TRUE) %>% data.frame
+```
 
+```{r fig.height = 12, fig.width=10}
 cellline_i <- c(combined_data %>% dplyr::arrange(IC50_LY) %>% .$cell_line %>% head(n=40), 
                 combined_data %>% dplyr::arrange(IC50_Palbo) %>% .$cell_line %>% head(n=40)) %>% unique
 
@@ -195,8 +201,7 @@ combined_data %>%
 
 # plot IC50 according to cancer type
 
-```{r}
-
+```{r results=FALSE}
 combined_data$RB1_status_LY
 
 RB1_col = c("WT" = "Dodgerblue3", "MUT" = "orange")

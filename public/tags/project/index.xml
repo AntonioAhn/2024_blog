@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Project on Antonio Ahn&#39;s website</title>
+    <link>//localhost:4321/tags/project/</link>
+    <description>Recent content in Project on Antonio Ahn&#39;s website</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Sun, 07 Apr 2024 00:00:00 +0000</lastBuildDate>
+    <atom:link href="//localhost:4321/tags/project/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>LY Palbo IC50 analysis of pan cancer cell lines (Gong Buchanan 2017)</title>
+      <link>//localhost:4321/posts/gong-buchanan-2017-lypalbo-ic50/</link>
+      <pubDate>Sun, 07 Apr 2024 00:00:00 +0000</pubDate>
+      <guid>//localhost:4321/posts/gong-buchanan-2017-lypalbo-ic50/</guid>
+      <description>The data is from this paper:&#xA;Gong X, Litchfield LM, Webster Y, Chio LC, Wong SS, Stewart TR, Dowless M, Dempsey J, Zeng Y, Torres R, Boehnke K, Mur C, Marugán C, Baquero C, Yu C, Bray SM, Wulur IH, Bi C, Chu S, Qian HR, Iversen PW, Merzoug FF, Ye XS, Reinhard C, De Dios A, Du J, Caldwell CW, Lallena MJ, Beckmann RP, Buchanan SG. Genomic Aberrations that Activate D-type Cyclins Are Associated with Enhanced Sensitivity to the CDK4 and CDK6 Inhibitor Abemaciclib.</description>
+    </item>
+  </channel>
+</rss>

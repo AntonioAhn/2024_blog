@@ -6,8 +6,15 @@
     <description>Recent content in Posts on Antonio Ahn&#39;s website</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Thu, 01 Feb 2024 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Sun, 07 Apr 2024 00:00:00 +0000</lastBuildDate>
     <atom:link href="//localhost:4321/posts/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Gong_Buchanan_2017_LYPalbo_IC50</title>
+      <link>//localhost:4321/posts/gong-buchanan-2017-lypalbo-ic50/</link>
+      <pubDate>Sun, 07 Apr 2024 00:00:00 +0000</pubDate>
+      <guid>//localhost:4321/posts/gong-buchanan-2017-lypalbo-ic50/</guid>
+      <description>The data is from this paper: Gong X, Litchfield LM, Webster Y, Chio LC, Wong SS, Stewart TR, Dowless M, Dempsey J, Zeng Y, Torres R, Boehnke K, Mur C, Marugán C, Baquero C, Yu C, Bray SM, Wulur IH, Bi C, Chu S, Qian HR, Iversen PW, Merzoug FF, Ye XS, Reinhard C, De Dios A, Du J, Caldwell CW, Lallena MJ, Beckmann RP, Buchanan SG. Genomic Aberrations that Activate D-type Cyclins Are Associated with Enhanced Sensitivity to the CDK4 and CDK6 Inhibitor Abemaciclib.</description>
+    </item>
     <item>
       <title>learning bash functions</title>
       <link>//localhost:4321/posts/2024-02-01-learning-bash-functions/</link>

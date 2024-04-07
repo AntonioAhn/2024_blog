@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=443&amp;path=livereload" data-no-instant defer></script>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Gong_Buchanan_2017_LYPalbo_IC50 | Antonio Ahn&#39;s website</title>
+    <link rel="stylesheet" href="../../css/style.css" />
+    <link rel="stylesheet" href="../../css/fonts.css" />
+    
+  </head>
+
+  <body>
+    <nav>
+    <ul class="menu">
+      
+      <li><a href="../../">Home</a></li>
+      
+      <li><a href="../../posts/">Posts</a></li>
+      
+      <li><a href="../../about/">About</a></li>
+      
+      <li><a href="../../categories/">Categories</a></li>
+      
+      <li><a href="../../tags/">Tags</a></li>
+      
+      <li><a href="../../publication/">Publications</a></li>
+      
+      <li><a href="../../resume/">Resume</a></li>
+      
+    </ul>
+    <hr/>
+    </nav>
+
+<div class="article-meta">
+<h1><span class="title">Gong_Buchanan_2017_LYPalbo_IC50</span></h1>
+
+<h2 class="date">2024/04/07</h2>
+</div>
+
+<main>
+<p>The data is from this paper:
+Gong X, Litchfield LM, Webster Y, Chio LC, Wong SS, Stewart TR, Dowless M, Dempsey J, Zeng Y, Torres R, Boehnke K, Mur C, Marugán C, Baquero C, Yu C, Bray SM, Wulur IH, Bi C, Chu S, Qian HR, Iversen PW, Merzoug FF, Ye XS, Reinhard C, De Dios A, Du J, Caldwell CW, Lallena MJ, Beckmann RP, Buchanan SG. Genomic Aberrations that Activate D-type Cyclins Are Associated with Enhanced Sensitivity to the CDK4 and CDK6 Inhibitor Abemaciclib. Cancer Cell. 2017 Dec 11;32(6):761-776.e6. doi: 10.1016/j.ccell.2017.11.006. PMID: 29232554.</p>
+<pre><code class="language-r">options(ggrepel.max.overlaps = Inf)
+</code></pre>
+<h1 id="read-data">read data</h1>
+<pre><code class="language-r">LY_data &lt;- read_csv(file.path(file_dir, &quot;Buchanan_AbsIC50Data_Abema.csv&quot;))
+</code></pre>
+<pre><code>## New names:
+## Rows: 560 Columns: 31
+## ── Column specification
+## ──────────────────────────────────────────────────────── Delimiter: &quot;,&quot; chr
+## (16): Cell Line, Cancer Type, DCAF, KHSV cyclin (k-cyclin), CCND 3'UTR l... dbl
+## (12): Abs IC50 (µM) Abemaciclib, StdErr(Abs IC50), CCND1 cn, CCND2 cn, C... lgl
+## (3): ...29, ...30, ...31
+## ℹ Use `spec()` to retrieve the full column specification for this data. ℹ
+## Specify the column types or set `show_col_types = FALSE` to quiet this message.
+## • `` -&gt; `...29`
+## • `` -&gt; `...30`
+## • `` -&gt; `...31`
+</code></pre>
+<pre><code class="language-r">Palbo_data &lt;- read_csv(file.path(file_dir, &quot;Buchanan_AbsIC50Data_Palbo.csv&quot;))
+</code></pre>
+<pre><code>## New names:
+## Rows: 492 Columns: 24
+## ── Column specification
+## ──────────────────────────────────────────────────────── Delimiter: &quot;,&quot; chr
+## (13): Cell Line, Cancer Type, DCAF, KHSV cyclin (k-cyclin), CCND1 3UTR l... dbl
+## (10): Abs IC50 (µM) Palbociclib, CCND1 cn, CCND2 cn, CCND3 cn, CCNE1 cn,... lgl
+## (1): ...23
+## ℹ Use `spec()` to retrieve the full column specification for this data. ℹ
+## Specify the column types or set `show_col_types = FALSE` to quiet this message.
+## • `` -&gt; `...23`
+## • `` -&gt; `...24`
+</code></pre>
+<h1 id="summary">summary</h1>
+<pre><code class="language-r">LY_data %&gt;% dim
+</code></pre>
+<pre><code>## [1] 560  31
+</code></pre>
+<pre><code class="language-r">Palbo_data %&gt;% dim
+</code></pre>
+<pre><code>## [1] 492  24
+</code></pre>
+<pre><code class="language-r">LY_data %&gt;% head
+</code></pre>
+<pre><code>## # A tibble: 6 × 31
+##   Cell L…¹ Cance…² Abs I…³ StdEr…⁴ DCAF  CCND1…⁵ CCND2…⁶ CCND3…⁷ CCNE1…⁸ KHSV …⁹
+##   &lt;chr&gt;    &lt;chr&gt;     &lt;dbl&gt;   &lt;dbl&gt; &lt;chr&gt;   &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt; &lt;chr&gt;  
+## 1 JeKo-1   mantle…    0.06    0.02 y           4       4       5       2 &lt;NA&gt;   
+## 2 Kasumi-6 acute …    0.12    0.05 &lt;NA&gt;        2       1       2       2 &lt;NA&gt;   
+## 3 LS-513   colon …    0.13    0.04 &lt;NA&gt;        2       2       2       2 &lt;NA&gt;   
+## 4 Z-138    mantle…    0.13    0.06 y          NA      NA      NA      NA &lt;NA&gt;   
+## 5 DMS-53   lung S…    0.17    0.06 y           3      12       3       2 &lt;NA&gt;   
+## 6 SK-N-FI  neurob…    0.21   NA    &lt;NA&gt;        2       3       2       2 &lt;NA&gt;   
+## # … with 21 more variables: `CCND 3'UTR loss` &lt;chr&gt;, `CCND1 t(11;14)` &lt;chr&gt;,
+## #   `CCND1 mut` &lt;chr&gt;, `CCND2 mut` &lt;chr&gt;, `CCND3 mut` &lt;chr&gt;,
+## #   `CDKN2A mut` &lt;chr&gt;, `CDKN2A cn` &lt;dbl&gt;, `FBXO31 cn` &lt;dbl&gt;, `FBXO4 cn` &lt;dbl&gt;,
+## #   `FBXW8 cn` &lt;dbl&gt;, `PARK2 cn` &lt;dbl&gt;, `RB1 mut` &lt;chr&gt;, `FBXO4 mut` &lt;chr&gt;,
+## #   `mRNA Expression Source` &lt;chr&gt;, `Copy Number Source` &lt;chr&gt;,
+## #   `Mutation Data Source` &lt;chr&gt;, `Doubling Times (Hours)` &lt;dbl&gt;,
+## #   `Seeding Density (cells/well)` &lt;chr&gt;, ...29 &lt;lgl&gt;, ...30 &lt;lgl&gt;, …
+</code></pre>
+<pre><code class="language-r">Palbo_data %&gt;% head
+</code></pre>
+<pre><code>## # A tibble: 6 × 24
+##   Cell L…¹ Cance…² Abs I…³ DCAF  CCND1…⁴ CCND2…⁵ CCND3…⁶ CCNE1…⁷ KHSV …⁸ CCND1…⁹
+##   &lt;chr&gt;    &lt;chr&gt;     &lt;dbl&gt; &lt;chr&gt;   &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt; &lt;chr&gt;   &lt;chr&gt;  
+## 1 A704     kidney…    9.86 y           2       3       2       2 &lt;NA&gt;    &lt;NA&gt;   
+## 2 BCP-1    body c…    0.32 y           2       3       2       2 y       &lt;NA&gt;   
+## 3 CCF-STT… glioma    20    y           2       2      14       2 &lt;NA&gt;    &lt;NA&gt;   
+## 4 CHP-212  neurob…    1.07 y           2       2       2       2 &lt;NA&gt;    &lt;NA&gt;   
+## 5 COLO-205 colon …    1.98 y           3       3      12       3 &lt;NA&gt;    &lt;NA&gt;   
+## 6 D-283MED medull…    2.83 y           2       2       2       2 &lt;NA&gt;    &lt;NA&gt;   
+## # … with 14 more variables: `CCND1 t(11;14)` &lt;chr&gt;, `CCND1 mut` &lt;chr&gt;,
+## #   `CCND2 mut` &lt;chr&gt;, `CCND3 mut` &lt;chr&gt;, `CDKN2A mut` &lt;chr&gt;,
+## #   `CDKN2A cn` &lt;dbl&gt;, `FBXO31 cn` &lt;dbl&gt;, `FBXO4 cn` &lt;dbl&gt;, `FBXW8 cn` &lt;dbl&gt;,
+## #   `PARK2 cn` &lt;dbl&gt;, `RB1 mut` &lt;chr&gt;, `FBXO4 mut` &lt;chr&gt;, ...23 &lt;lgl&gt;,
+## #   ...24 &lt;chr&gt;, and abbreviated variable names ¹​`Cell Line`, ²​`Cancer Type`,
+## #   ³​`Abs IC50 (µM) Palbociclib`, ⁴​`CCND1 cn`, ⁵​`CCND2 cn`, ⁶​`CCND3 cn`,
+## #   ⁷​`CCNE1 cn`, ⁸​`KHSV cyclin (k-cyclin)`, ⁹​`CCND1 3UTR loss`
+</code></pre>
+<h1 id="tidy-up">tidy up</h1>
+<pre><code class="language-r">LY_data &lt;- LY_data %&gt;% dplyr::rename(&quot;cell_line&quot; = &quot;Cell Line&quot;,
+                                     &quot;cancer_type&quot; = &quot;Cancer Type&quot;,
+                                     &quot;IC50&quot; = &quot;Abs IC50 (µM) Abemaciclib&quot;)
+#                                     &quot;RB1_status&quot; = &quot;RB1 mut&quot;)
+
+Palbo_data &lt;- Palbo_data %&gt;% dplyr::rename(&quot;cell_line&quot; = &quot;Cell Line&quot;,
+                                           &quot;cancer_type&quot; = &quot;Cancer Type&quot;,
+                                           &quot;IC50&quot; = &quot;Abs IC50 (µM) Palbociclib&quot;)
+#                                           &quot;RB1_status&quot; = &quot;RB1 mut&quot;)
+</code></pre>
+<pre><code class="language-r">LY_data$RB1_status = ifelse(is.na(LY_data$&quot;RB1 mut&quot;), &quot;WT&quot;, &quot;MUT&quot;)
+Palbo_data$RB1_status = ifelse(is.na(Palbo_data$&quot;RB1 mut&quot;), &quot;WT&quot;, &quot;MUT&quot;)
+</code></pre>
+<pre><code class="language-r">combined_data &lt;- left_join(LY_data %&gt;% dplyr::select(&quot;cell_line&quot;, &quot;cancer_type&quot;, &quot;IC50&quot;, &quot;RB1_status&quot;), 
+                           Palbo_data %&gt;% dplyr::select(&quot;cell_line&quot;, &quot;cancer_type&quot;, &quot;IC50&quot;, &quot;RB1_status&quot;), 
+                           by = &quot;cell_line&quot;)
+
+colnames(combined_data) = combined_data %&gt;% 
+  colnames %&gt;% 
+  gsub(&quot;\\.x&quot;, &quot;_LY&quot;, .) %&gt;%
+  gsub(&quot;\\.y&quot;, &quot;_Palbo&quot;, .)
+
+combined_data$cancer_type_Palbo %&gt;% is.na %&gt;% table
+</code></pre>
+<pre><code>## .
+## FALSE  TRUE 
+##   492    68
+</code></pre>
+<pre><code class="language-r"># Theres less IC50 values for Palbo than LY. these are changed to 0. was finding an error when plotting in ggplot, so decided to make it 0.... myabe there is a better way?
+combined_data$IC50_Palbo[is.na(combined_data$IC50_Palbo)] = 0
+</code></pre>
+<h1 id="overlap">overlap</h1>
+<pre><code class="language-r">list_i &lt;- list(LY_data = LY_data$cell_line, 
+               Palbo_data = Palbo_data$cell_line
+)
+     
+LY_Palbo_overlap &lt;- calculate.overlap(x = list_i)
+</code></pre>
+<pre><code class="language-r">ggvenn(
+  list_i, 
+  fill_color = c(&quot;#0073C2FF&quot;, &quot;#EFC000FF&quot;, &quot;#868686FF&quot;),
+  stroke_size = 0.5, set_name_size = 7, text_size = 7
+  )
+</code></pre>
+<img src="../../posts/gong-buchanan-2017-lypalbo-ic50/index_files/figure-html/unnamed-chunk-10-1.png" width="672" />
+<h1 id="cancer-type-summary">cancer type summary</h1>
+<pre><code class="language-r">cancer_type_df &lt;- combined_data$cancer_type_LY %&gt;% table %&gt;% sort(decreasing = TRUE) %&gt;% data.frame
+colnames(cancer_type_df) &lt;- c(&quot;cancer_type&quot;, &quot;frequency&quot;)
+
+cancer_type_df %&gt;% ggplot(aes(x = cancer_type, y = frequency, fill = cancer_type)) + 
+  geom_bar(stat = &quot;identity&quot;) +
+  geom_text(aes(label=frequency), position=position_dodge(width=0.9), vjust=-0.25, size = 2) +
+  theme_bw() + 
+  theme(legend.position = &quot;none&quot;, legend.title = element_blank() ,axis.text.x = element_text(angle = 45, hjust = 1))
+</code></pre>
+<img src="../../posts/gong-buchanan-2017-lypalbo-ic50/index_files/figure-html/unnamed-chunk-11-1.png" width="960" />
+<pre><code class="language-r">cancer_order &lt;- cancer_type_df$cancer_type %&gt;% levels
+</code></pre>
+<h1 id="ic50-summary">IC50 summary</h1>
+<pre><code class="language-r">combined_data$cancer_type_LY %&gt;% table %&gt;% sort(decreasing = TRUE) %&gt;% data.frame
+</code></pre>
+<pre><code>##                                       . Freq
+## 1                            lung NSCLC   62
+## 2                         breast cancer   43
+## 3                          liver cancer   37
+## 4                              melanoma   36
+## 5                          colon cancer   35
+## 6                        gastric cancer   32
+## 7                             lung SCLC   30
+## 8                      head/neck cancer   28
+## 9                     esophageal cancer   21
+## 10                       ovarian cancer   21
+## 11                               glioma   18
+## 12        acute lymphoblastic leukaemia   14
+## 13                        kidney cancer   14
+## 14                    pancreatic cancer   13
+## 15                        lung Squamous   11
+## 16                        neuroblastoma   11
+## 17                         osteosarcoma   10
+## 18                  soft tissue sarcoma   10
+## 19              acute myeloid leukaemia    9
+## 20                       bladder cancer    9
+## 21                   Burkitt's lymphoma    8
+## 22                      cervical cancer    8
+## 23                   endometrial cancer    6
+## 24                       Ewings sarcoma    6
+## 25                     multiple myeloma    6
+## 26                        non-cancerous    6
+## 27                      prostate cancer    5
+## 28                       thyroid cancer    5
+## 29                 mantle cell lymphoma    4
+## 30                      medulloblastoma    4
+## 31                         mesothelioma    4
+## 32                        biliary tract    3
+## 33         chronic myelogenous leukemia    3
+## 34        diffuse large B cell lymphoma    3
+## 35                        adrenal gland    2
+## 36          B cell lymphoma unspecified    2
+## 37                         vulva cancer    2
+## 38 acute leukaemia of ambiguous lineage    1
+## 39             artificially transformed    1
+## 40           body cavity based lymphoma    1
+## 41                       chondrosarcoma    1
+## 42              duodenal adenocarcinoma    1
+## 43                  epithelioid sarcoma    1
+## 44                    giant cell tumour    1
+## 45                  hairy cell leukemia    1
+## 46                   Hodgkin's lymphoma    1
+## 47    mycosis fungoides-Sezary syndrome    1
+## 48             myelodysplastic syndrome    1
+## 49             ovarian granulosa cancer    1
+## 50           prostate small cell cancer    1
+## 51                       retinoblastoma    1
+## 52                      somatostatinoma    1
+## 53        T cell lymphoblastic lymphoma    1
+## 54                             teratoma    1
+## 55                    testicular cancer    1
+## 56                         Wilm's tumor    1
+</code></pre>
+<pre><code class="language-r">cellline_i &lt;- c(combined_data %&gt;% dplyr::arrange(IC50_LY) %&gt;% .$cell_line %&gt;% head(n=40), 
+                combined_data %&gt;% dplyr::arrange(IC50_Palbo) %&gt;% .$cell_line %&gt;% head(n=40)) %&gt;% unique
+
+combined_data &lt;- combined_data %&gt;% unite(plot_name, cell_line, cancer_type_LY, remove = FALSE)
+combined_data$plot_name &lt;- combined_data$plot_name %&gt;% gsub(&quot; &quot;, &quot;_&quot;, .)
+
+combined_data %&gt;% ggplot(aes(x = -log10(IC50_LY), y = -log10(IC50_Palbo), col = cancer_type_LY)) + 
+  geom_point() +
+  geom_text_repel(data = combined_data %&gt;% filter(cell_line %in% cellline_i), aes(label = plot_name), size = 2.5) + 
+  theme_bw() + 
+  theme(legend.position = &quot;bottom&quot;, legend.title = element_blank())
+</code></pre>
+<img src="../../posts/gong-buchanan-2017-lypalbo-ic50/index_files/figure-html/unnamed-chunk-12-1.png" width="960" />
+<h1 id="rb-mutatant-status-by-cancer-type">RB mutatant status by cancer type</h1>
+<pre><code class="language-r">RB_mutant_df &lt;- combined_data %&gt;% 
+  dplyr::group_by(cancer_type_LY, RB1_status_LY) %&gt;% 
+  summarise(count = n())
+</code></pre>
+<pre><code>## `summarise()` has grouped output by 'cancer_type_LY'. You can override using
+## the `.groups` argument.
+</code></pre>
+<pre><code class="language-r">RB_mutant_df$cancer_type_LY &lt;- factor(RB_mutant_df$cancer_type_LY, levels = cancer_order)
+</code></pre>
+<pre><code class="language-r">#RB_mutant_df %&gt;% head
+RB_mutant_df$count %&gt;% max()
+
+RB_mutant_df %&gt;% 
+  ggplot(aes(x = RB1_status_LY, y = count)) + 
+  geom_bar(stat= &quot;identity&quot;) + 
+  ylim(c(0, 65)) +
+  facet_wrap( . ~ cancer_type_LY) +
+  geom_text(aes(label=count), position=position_dodge(width=0.9), vjust=-0.25, size = 2) +
+  theme_bw()
+</code></pre>
+<pre><code class="language-r">RB_mutant_df %&gt;% 
+  ggplot(aes(x = cancer_type_LY, y = count, fill = RB1_status_LY)) + 
+  #geom_bar(stat=stat_count) +
+  geom_bar(stat='identity') + 
+  #ylim(c(0, 65)) +
+  #facet_wrap( . ~ cancer_type_LY) +
+  #geom_text(aes(label=count), position=position_dodge(width=0.9), vjust=-0.25, size = 2) +
+  theme_bw() +
+  theme(legend.position = &quot;none&quot;, axis.title.x = element_blank() ,axis.text.x = element_text(angle = 45, hjust = 1))
+</code></pre>
+<img src="../../posts/gong-buchanan-2017-lypalbo-ic50/index_files/figure-html/unnamed-chunk-15-1.png" width="672" />
+<h1 id="which-cancer-type-responds-the-best">which cancer type responds the best</h1>
+<pre><code class="language-r">combined_data %&gt;% 
+  ggplot(aes(y = IC50_LY,  x = fct_reorder(cancer_type_LY, IC50_LY, .desc	
+ = TRUE))) + 
+  geom_boxplot() +
+  theme_bw() + 
+  theme(legend.position = &quot;none&quot;, axis.title.x = element_blank() ,axis.text.x = element_text(angle = 45, hjust = 1))
+</code></pre>
+<img src="../../posts/gong-buchanan-2017-lypalbo-ic50/index_files/figure-html/unnamed-chunk-16-1.png" width="1152" />
+<pre><code class="language-r">combined_data %&gt;% 
+  ggplot(aes(y = IC50_Palbo,  x = fct_reorder(cancer_type_LY, IC50_Palbo, .desc	
+ = TRUE))) + 
+  geom_boxplot() +
+  theme_bw() + 
+  theme(legend.position = &quot;none&quot;, axis.title.x = element_blank() ,axis.text.x = element_text(angle = 45, hjust = 1))
+</code></pre>
+<img src="../../posts/gong-buchanan-2017-lypalbo-ic50/index_files/figure-html/unnamed-chunk-16-2.png" width="1152" />
+<h1 id="plot-ic50-according-to-cancer-type">plot IC50 according to cancer type</h1>
+<pre><code class="language-r">combined_data$RB1_status_LY
+</code></pre>
+<pre><code>##   [1] &quot;WT&quot;  &quot;WT&quot;  &quot;WT&quot;  &quot;WT&quot;  &quot;WT&quot;  &quot;WT&quot;  &quot;WT&quot;  &quot;WT&quot;  &quot;WT&quot;  &quot;WT&quot;  &quot;WT&quot;  &quot;WT&quot; 
+##  [13] &quot;WT&quot;  &quot;WT&quot;  &quot;WT&quot;  &quot;WT&quot;  &quot;WT&quot;  &quot;WT&quot;  &quot;WT&quot;  &quot;WT&quot;  &quot;WT&quot;  &quot;WT&quot;  &quot;WT&quot;  &quot;WT&quot; 
+##  [25] &quot;WT&quot;  &quot;WT&quot;  &quot;WT&quot;  &quot;WT&quot;  &quot;WT&quot;  &quot;WT&quot;  &quot;WT&quot;  &quot;WT&quot;  &quot;WT&quot;  &quot;WT&quot;  &quot;WT&quot;  &quot;WT&quot; 
+##  [37] &quot;WT&quot;  &quot;WT&quot;  &quot;WT&quot;  &quot;WT&quot;  &quot;WT&quot;  &quot;WT&quot;  &quot;WT&quot;  &quot;WT&quot;  &quot;WT&quot;  &quot;WT&quot;  &quot;WT&quot;  &quot;WT&quot; 
+##  [49] &quot;WT&quot;  &quot;WT&quot;  &quot;WT&quot;  &quot;WT&quot;  &quot;WT&quot;  &quot;WT&quot;  &quot;MUT&quot; &quot;WT&quot;  &quot;WT&quot;  &quot;WT&quot;  &quot;WT&quot;  &quot;WT&quot; 
+##  [61] &quot;WT&quot;  &quot;WT&quot;  &quot;WT&quot;  &quot;WT&quot;  &quot;WT&quot;  &quot;WT&quot;  &quot;WT&quot;  &quot;WT&quot;  &quot;WT&quot;  &quot;MUT&quot; &quot;WT&quot;  &quot;WT&quot; 
+##  [73] &quot;WT&quot;  &quot;WT&quot;  &quot;WT&quot;  &quot;WT&quot;  &quot;WT&quot;  &quot;WT&quot;  &quot;WT&quot;  &quot;WT&quot;  &quot;WT&quot;  &quot;WT&quot;  &quot;WT&quot;  &quot;WT&quot; 
+##  [85] &quot;WT&quot;  &quot;WT&quot;  &quot;WT&quot;  &quot;WT&quot;  &quot;WT&quot;  &quot;WT&quot;  &quot;WT&quot;  &quot;WT&quot;  &quot;WT&quot;  &quot;WT&quot;  &quot;WT&quot;  &quot;WT&quot; 
+##  [97] &quot;WT&quot;  &quot;WT&quot;  &quot;MUT&quot; &quot;WT&quot;  &quot;WT&quot;  &quot;WT&quot;  &quot;WT&quot;  &quot;WT&quot;  &quot;MUT&quot; &quot;WT&quot;  &quot;MUT&quot; &quot;WT&quot; 
+## [109] &quot;WT&quot;  &quot;WT&quot;  &quot;WT&quot;  &quot;WT&quot;  &quot;WT&quot;  &quot;WT&quot;  &quot;MUT&quot; &quot;WT&quot;  &quot;WT&quot;  &quot;WT&quot;  &quot;WT&quot;  &quot;WT&quot; 
+## [121] &quot;WT&quot;  &quot;WT&quot;  &quot;WT&quot;  &quot;WT&quot;  &quot;WT&quot;  &quot;WT&quot;  &quot;MUT&quot; &quot;WT&quot;  &quot;WT&quot;  &quot;WT&quot;  &quot;WT&quot;  &quot;WT&quot; 
+## [133] &quot;WT&quot;  &quot;WT&quot;  &quot;MUT&quot; &quot;WT&quot;  &quot;WT&quot;  &quot;WT&quot;  &quot;WT&quot;  &quot;WT&quot;  &quot;WT&quot;  &quot;WT&quot;  &quot;WT&quot;  &quot;MUT&quot;
+## [145] &quot;WT&quot;  &quot;WT&quot;  &quot;WT&quot;  &quot;WT&quot;  &quot;WT&quot;  &quot;WT&quot;  &quot;WT&quot;  &quot;WT&quot;  &quot;WT&quot;  &quot;WT&quot;  &quot;WT&quot;  &quot;WT&quot; 
+## [157] &quot;WT&quot;  &quot;WT&quot;  &quot;WT&quot;  &quot;WT&quot;  &quot;WT&quot;  &quot;WT&quot;  &quot;WT&quot;  &quot;WT&quot;  &quot;WT&quot;  &quot;MUT&quot; &quot;WT&quot;  &quot;WT&quot; 
+## [169] &quot;WT&quot;  &quot;WT&quot;  &quot;WT&quot;  &quot;WT&quot;  &quot;WT&quot;  &quot;WT&quot;  &quot;WT&quot;  &quot;WT&quot;  &quot;WT&quot;  &quot;WT&quot;  &quot;WT&quot;  &quot;MUT&quot;
+## [181] &quot;WT&quot;  &quot;WT&quot;  &quot;WT&quot;  &quot;WT&quot;  &quot;WT&quot;  &quot;WT&quot;  &quot;WT&quot;  &quot;WT&quot;  &quot;WT&quot;  &quot;WT&quot;  &quot;WT&quot;  &quot;WT&quot; 
+## [193] &quot;WT&quot;  &quot;WT&quot;  &quot;WT&quot;  &quot;WT&quot;  &quot;WT&quot;  &quot;WT&quot;  &quot;WT&quot;  &quot;WT&quot;  &quot;WT&quot;  &quot;WT&quot;  &quot;WT&quot;  &quot;WT&quot; 
+## [205] &quot;WT&quot;  &quot;WT&quot;  &quot;WT&quot;  &quot;WT&quot;  &quot;WT&quot;  &quot;WT&quot;  &quot;WT&quot;  &quot;WT&quot;  &quot;WT&quot;  &quot;WT&quot;  &quot;WT&quot;  &quot;WT&quot; 
+## [217] &quot;WT&quot;  &quot;WT&quot;  &quot;MUT&quot; &quot;WT&quot;  &quot;WT&quot;  &quot;WT&quot;  &quot;WT&quot;  &quot;WT&quot;  &quot;WT&quot;  &quot;WT&quot;  &quot;WT&quot;  &quot;WT&quot; 
+## [229] &quot;WT&quot;  &quot;WT&quot;  &quot;WT&quot;  &quot;WT&quot;  &quot;WT&quot;  &quot;WT&quot;  &quot;MUT&quot; &quot;WT&quot;  &quot;WT&quot;  &quot;WT&quot;  &quot;WT&quot;  &quot;WT&quot; 
+## [241] &quot;WT&quot;  &quot;WT&quot;  &quot;WT&quot;  &quot;WT&quot;  &quot;MUT&quot; &quot;WT&quot;  &quot;WT&quot;  &quot;WT&quot;  &quot;WT&quot;  &quot;WT&quot;  &quot;WT&quot;  &quot;WT&quot; 
+## [253] &quot;WT&quot;  &quot;WT&quot;  &quot;WT&quot;  &quot;WT&quot;  &quot;WT&quot;  &quot;WT&quot;  &quot;WT&quot;  &quot;WT&quot;  &quot;WT&quot;  &quot;WT&quot;  &quot;WT&quot;  &quot;WT&quot; 
+## [265] &quot;MUT&quot; &quot;WT&quot;  &quot;WT&quot;  &quot;WT&quot;  &quot;WT&quot;  &quot;WT&quot;  &quot;WT&quot;  &quot;WT&quot;  &quot;WT&quot;  &quot;WT&quot;  &quot;MUT&quot; &quot;WT&quot; 
+## [277] &quot;WT&quot;  &quot;WT&quot;  &quot;WT&quot;  &quot;WT&quot;  &quot;WT&quot;  &quot;WT&quot;  &quot;WT&quot;  &quot;WT&quot;  &quot;WT&quot;  &quot;WT&quot;  &quot;MUT&quot; &quot;WT&quot; 
+## [289] &quot;WT&quot;  &quot;WT&quot;  &quot;WT&quot;  &quot;WT&quot;  &quot;WT&quot;  &quot;WT&quot;  &quot;WT&quot;  &quot;WT&quot;  &quot;WT&quot;  &quot;WT&quot;  &quot;MUT&quot; &quot;WT&quot; 
+## [301] &quot;MUT&quot; &quot;WT&quot;  &quot;WT&quot;  &quot;MUT&quot; &quot;WT&quot;  &quot;MUT&quot; &quot;WT&quot;  &quot;WT&quot;  &quot;MUT&quot; &quot;WT&quot;  &quot;MUT&quot; &quot;MUT&quot;
+## [313] &quot;MUT&quot; &quot;WT&quot;  &quot;WT&quot;  &quot;WT&quot;  &quot;WT&quot;  &quot;WT&quot;  &quot;WT&quot;  &quot;WT&quot;  &quot;WT&quot;  &quot;WT&quot;  &quot;WT&quot;  &quot;MUT&quot;
+## [325] &quot;MUT&quot; &quot;WT&quot;  &quot;WT&quot;  &quot;WT&quot;  &quot;WT&quot;  &quot;WT&quot;  &quot;WT&quot;  &quot;WT&quot;  &quot;WT&quot;  &quot;WT&quot;  &quot;WT&quot;  &quot;WT&quot; 
+## [337] &quot;WT&quot;  &quot;MUT&quot; &quot;WT&quot;  &quot;WT&quot;  &quot;WT&quot;  &quot;WT&quot;  &quot;WT&quot;  &quot;MUT&quot; &quot;WT&quot;  &quot;MUT&quot; &quot;WT&quot;  &quot;WT&quot; 
+## [349] &quot;WT&quot;  &quot;WT&quot;  &quot;WT&quot;  &quot;WT&quot;  &quot;WT&quot;  &quot;WT&quot;  &quot;WT&quot;  &quot;WT&quot;  &quot;WT&quot;  &quot;WT&quot;  &quot;WT&quot;  &quot;WT&quot; 
+## [361] &quot;WT&quot;  &quot;WT&quot;  &quot;WT&quot;  &quot;WT&quot;  &quot;WT&quot;  &quot;MUT&quot; &quot;WT&quot;  &quot;WT&quot;  &quot;WT&quot;  &quot;WT&quot;  &quot;WT&quot;  &quot;WT&quot; 
+## [373] &quot;WT&quot;  &quot;WT&quot;  &quot;WT&quot;  &quot;WT&quot;  &quot;MUT&quot; &quot;WT&quot;  &quot;WT&quot;  &quot;WT&quot;  &quot;WT&quot;  &quot;WT&quot;  &quot;WT&quot;  &quot;WT&quot; 
+## [385] &quot;WT&quot;  &quot;WT&quot;  &quot;WT&quot;  &quot;WT&quot;  &quot;WT&quot;  &quot;WT&quot;  &quot;WT&quot;  &quot;MUT&quot; &quot;WT&quot;  &quot;MUT&quot; &quot;MUT&quot; &quot;WT&quot; 
+## [397] &quot;WT&quot;  &quot;WT&quot;  &quot;WT&quot;  &quot;WT&quot;  &quot;WT&quot;  &quot;MUT&quot; &quot;MUT&quot; &quot;WT&quot;  &quot;WT&quot;  &quot;WT&quot;  &quot;WT&quot;  &quot;WT&quot; 
+## [409] &quot;WT&quot;  &quot;WT&quot;  &quot;WT&quot;  &quot;WT&quot;  &quot;WT&quot;  &quot;WT&quot;  &quot;WT&quot;  &quot;WT&quot;  &quot;WT&quot;  &quot;WT&quot;  &quot;WT&quot;  &quot;WT&quot; 
+## [421] &quot;WT&quot;  &quot;MUT&quot; &quot;MUT&quot; &quot;WT&quot;  &quot;WT&quot;  &quot;WT&quot;  &quot;WT&quot;  &quot;WT&quot;  &quot;WT&quot;  &quot;WT&quot;  &quot;WT&quot;  &quot;MUT&quot;
+## [433] &quot;WT&quot;  &quot;WT&quot;  &quot;WT&quot;  &quot;WT&quot;  &quot;WT&quot;  &quot;WT&quot;  &quot;WT&quot;  &quot;WT&quot;  &quot;WT&quot;  &quot;WT&quot;  &quot;WT&quot;  &quot;WT&quot; 
+## [445] &quot;WT&quot;  &quot;WT&quot;  &quot;WT&quot;  &quot;WT&quot;  &quot;WT&quot;  &quot;WT&quot;  &quot;WT&quot;  &quot;MUT&quot; &quot;WT&quot;  &quot;MUT&quot; &quot;WT&quot;  &quot;WT&quot; 
+## [457] &quot;WT&quot;  &quot;WT&quot;  &quot;WT&quot;  &quot;WT&quot;  &quot;WT&quot;  &quot;WT&quot;  &quot;WT&quot;  &quot;WT&quot;  &quot;WT&quot;  &quot;WT&quot;  &quot;WT&quot;  &quot;WT&quot; 
+## [469] &quot;WT&quot;  &quot;WT&quot;  &quot;WT&quot;  &quot;WT&quot;  &quot;WT&quot;  &quot;WT&quot;  &quot;MUT&quot; &quot;WT&quot;  &quot;WT&quot;  &quot;WT&quot;  &quot;WT&quot;  &quot;WT&quot; 
+## [481] &quot;WT&quot;  &quot;MUT&quot; &quot;WT&quot;  &quot;MUT&quot; &quot;WT&quot;  &quot;WT&quot;  &quot;WT&quot;  &quot;WT&quot;  &quot;WT&quot;  &quot;WT&quot;  &quot;WT&quot;  &quot;WT&quot; 
+## [493] &quot;WT&quot;  &quot;WT&quot;  &quot;WT&quot;  &quot;WT&quot;  &quot;WT&quot;  &quot;WT&quot;  &quot;WT&quot;  &quot;WT&quot;  &quot;WT&quot;  &quot;WT&quot;  &quot;WT&quot;  &quot;WT&quot; 
+## [505] &quot;WT&quot;  &quot;WT&quot;  &quot;WT&quot;  &quot;WT&quot;  &quot;WT&quot;  &quot;WT&quot;  &quot;WT&quot;  &quot;WT&quot;  &quot;WT&quot;  &quot;MUT&quot; &quot;WT&quot;  &quot;MUT&quot;
+## [517] &quot;WT&quot;  &quot;WT&quot;  &quot;WT&quot;  &quot;WT&quot;  &quot;WT&quot;  &quot;WT&quot;  &quot;WT&quot;  &quot;WT&quot;  &quot;WT&quot;  &quot;WT&quot;  &quot;WT&quot;  &quot;WT&quot; 
+## [529] &quot;WT&quot;  &quot;WT&quot;  &quot;WT&quot;  &quot;WT&quot;  &quot;WT&quot;  &quot;WT&quot;  &quot;WT&quot;  &quot;WT&quot;  &quot;WT&quot;  &quot;WT&quot;  &quot;WT&quot;  &quot;WT&quot; 
+## [541] &quot;WT&quot;  &quot;MUT&quot; &quot;WT&quot;  &quot;WT&quot;  &quot;WT&quot;  &quot;WT&quot;  &quot;WT&quot;  &quot;WT&quot;  &quot;WT&quot;  &quot;WT&quot;  &quot;WT&quot;  &quot;WT&quot; 
+## [553] &quot;WT&quot;  &quot;WT&quot;  &quot;WT&quot;  &quot;WT&quot;  &quot;WT&quot;  &quot;MUT&quot; &quot;WT&quot;  &quot;WT&quot;
+</code></pre>
+<pre><code class="language-r">RB1_col = c(&quot;WT&quot; = &quot;Dodgerblue3&quot;, &quot;MUT&quot; = &quot;orange&quot;)
+
+plot_IC50 &lt;- function(type){
+  temp_df &lt;- combined_data %&gt;% filter(cancer_type_LY == type)
+
+  max_x = temp_df$IC50_LY %&gt;% max %&gt;% round(digits = 1) + 1
+  max_y = temp_df$IC50_Palbo %&gt;%  max(na.rm= TRUE) %&gt;% round(digits = 1) +1
+
+  temp_df %&gt;% 
+    ggplot(aes(x = IC50_LY, y = IC50_Palbo, col = RB1_status_LY)) + 
+    geom_point() +
+    geom_text_repel(data = temp_df, aes(label = plot_name), size = 2.5) + 
+    scale_color_manual(values  = RB1_col) +
+    ggtitle(type) +
+    labs(x = &quot;IC50 LY (uM)&quot;, y = &quot;IC50 Palbo (uM)&quot;) +
+    ylim(max_y, 0) +
+    xlim(max_x, 0) +
+    theme_bw() + 
+    theme(legend.position = &quot;top&quot;, legend.title = element_blank(), plot.title = element_text(hjust = 0.5, size=25))
+  }
+</code></pre>
+<pre><code class="language-r">plot_IC50(&quot;breast cancer&quot;)
+</code></pre>
+<img src="../../posts/gong-buchanan-2017-lypalbo-ic50/index_files/figure-html/unnamed-chunk-18-1.png" width="960" />
+<pre><code class="language-r">plot_IC50(&quot;lung NSCLC&quot;)
+</code></pre>
+<img src="../../posts/gong-buchanan-2017-lypalbo-ic50/index_files/figure-html/unnamed-chunk-18-2.png" width="960" />
+<pre><code class="language-r">plot_IC50(&quot;melanoma&quot;)
+</code></pre>
+<img src="../../posts/gong-buchanan-2017-lypalbo-ic50/index_files/figure-html/unnamed-chunk-18-3.png" width="960" />
+<pre><code class="language-r">plot_IC50(&quot;prostate cancer&quot;)
+</code></pre>
+<img src="../../posts/gong-buchanan-2017-lypalbo-ic50/index_files/figure-html/unnamed-chunk-18-4.png" width="960" />
+<pre><code class="language-r">plot_IC50(&quot;pancreatic cancer&quot;)
+</code></pre>
+<img src="../../posts/gong-buchanan-2017-lypalbo-ic50/index_files/figure-html/unnamed-chunk-18-5.png" width="960" />
+<pre><code class="language-r">plot_IC50(&quot;colon cancer&quot;)
+</code></pre>
+<img src="../../posts/gong-buchanan-2017-lypalbo-ic50/index_files/figure-html/unnamed-chunk-18-6.png" width="960" />
+<pre><code class="language-r">plot_IC50(&quot;ovarian cancer&quot;)
+</code></pre>
+<img src="../../posts/gong-buchanan-2017-lypalbo-ic50/index_files/figure-html/unnamed-chunk-19-1.png" width="960" />
+<pre><code class="language-r">plot_IC50(&quot;liver cancer&quot;)
+</code></pre>
+<img src="../../posts/gong-buchanan-2017-lypalbo-ic50/index_files/figure-html/unnamed-chunk-19-2.png" width="960" />
+<pre><code class="language-r">plot_IC50(&quot;ovarian cancer&quot;)
+</code></pre>
+<img src="../../posts/gong-buchanan-2017-lypalbo-ic50/index_files/figure-html/unnamed-chunk-19-3.png" width="960" />
+
+</main>
+
+  <footer>
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/katex/dist/katex.min.css">
+<script src="//cdn.jsdelivr.net/combine/npm/katex/dist/katex.min.js,npm/katex/dist/contrib/auto-render.min.js,npm/@xiee/utils/js/render-katex.js" defer></script>
+
+<script src="//cdn.jsdelivr.net/npm/@xiee/utils/js/center-img.min.js" defer></script>
+
+  
+  <hr/>
+  <a href="https://github.com/AntonioAhn">Github</a> | <a href="https://twitter.com/AntonioAhnNZ">Twitter</a>
+  
+  </footer>
+  </body>
+</html>
+
